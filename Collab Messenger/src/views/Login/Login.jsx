@@ -20,7 +20,7 @@ export default function Login() {
         try {
             const userCredential = await loginUser(credentials.email, credentials.password);
             setAppState({ user: userCredential.user, userData: null });
-            navigate('/');
+            navigate('/teams');
         } catch (error) {
             console.error('Login failed', error);
             alert('Login failed: ' + error.message);

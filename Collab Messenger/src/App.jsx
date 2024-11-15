@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppContext } from './store/app.context';
 import Register from './views/Register/Register';
 import Login from './views/Login/Login';
@@ -8,6 +8,8 @@ import { auth } from './config/firebase.config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getUserData } from './services/users.service';
 import Home from './views/Home/Home';
+import Header from './components/Header/Header';
+import TeamPage from './views/TeamPage/TeamPage';
 
 if (process.env.NODE_ENV === "development") {
   const originalWarn = console.warn;
@@ -55,10 +57,12 @@ function App() {
   return (
     <AppContext.Provider value={{ ...appState, setAppState }}>
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/teams" element={<TeamPage />} />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

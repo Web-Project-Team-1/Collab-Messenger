@@ -1,0 +1,35 @@
+header {
+    background-color: #000;
+    color: #fff;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 10px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    margin-right: 1rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+nav a.active-link {
+    color: #fffffe;
+}
+
+nav a:hover {
+    color: #ffc400;
+}
