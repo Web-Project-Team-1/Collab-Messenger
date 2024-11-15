@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../store/app.context";
 import { loginUser } from "../../services/auth.service";
+import "./Login.css";
 
 export default function Login() {
     const [credentials, setCredentials] = useState({
@@ -34,7 +35,7 @@ export default function Login() {
     };
 
     return (
-        <div>
+        <div className="login-page">
             <h1>Login</h1>
             <label htmlFor="email">Email: </label>
             <input value={credentials.email} onChange={updateCredentials('email')} type="text" name="email" id="email" />

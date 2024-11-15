@@ -3,6 +3,7 @@ import { AppContext } from "../../store/app.context";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/auth.service";
 import { createUserHandle, getUserByUsername } from "../../services/users.service";
+import "./Register.css";
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -46,7 +47,7 @@ export default function Register() {
   };
 
   return (
-    <div>
+    <div className="register-page">
       <h1>Register</h1>
       <label htmlFor="username">Username: </label>
       <input value={user.username} onChange={updateUser('username')} type="text" name="username" id="username" />
