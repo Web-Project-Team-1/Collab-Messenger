@@ -2,11 +2,11 @@ import { useState, useContext } from "react";
 import { AppContext } from "../../store/app.context";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/auth.service";
-import { createUserHandle, getUserByHandle } from "../../services/users.service";
+import { createUserHandle, getUserByUsername } from "../../services/users.service";
 
 export default function Register() {
   const [user, setUser] = useState({
-    handle: '',
+    username: '',
     email: '',
     password: ''
   });
@@ -14,18 +14,18 @@ export default function Register() {
   const navigate = useNavigate();
 
   const register = async () => {
-    if (!user.handle || !user.email || !user.password) {
+    if (!user.username || !user.email || !user.password) {
       return alert('Please fill out all fields');
     }
 
     try {
-      const userFromDB = await getUserByHandle(user.handle);
+      const userFromDB = await getUserByUsername(user.username);
       if (userFromDB) {
-        throw new Error(`User ${user.handle} already exists`);
+        throw new Error(`User ${user.username} already exists`);
       }
 
-      const credential = await registerUser(user.email, user.password, user.handle);
-      await createUserHandle(user.handle, credential.user.uid, user.email);
+      const credential = await registerUser(user.email, user.password, user.username);
+      await createUserHandle(user.username, credential.user.uid, user.email);
 
       setAppState({
         user: credential.user,
@@ -48,8 +48,8 @@ export default function Register() {
   return (
     <div>
       <h1>Register</h1>
-      <label htmlFor="handle">Username: </label>
-      <input value={user.handle} onChange={updateUser('handle')} type="text" name="handle" id="handle" />
+      <label htmlFor="username">Username: </label>
+      <input value={user.username} onChange={updateUser('username')} type="text" name="username" id="username" />
       <br /><br />
       <label htmlFor="email">Email: </label>
       <input value={user.email} onChange={updateUser('email')} type="text" name="email" id="email" />

@@ -1,25 +1,25 @@
 import { get, set, ref, query, equalTo, orderByChild, update } from 'firebase/database';
 import { db} from '../config/firebase.config';
 
-export const getUserByHandle = async (handle) => {
-    const snapshot = await get(ref(db, `users/${handle}`));
+export const getUserByUsername = async (username) => {
+    const snapshot = await get(ref(db, `users/${username}`));
     return snapshot.val();
 };
 
-export const createUserHandle = async (handle, uid, email, isAdmin = false) => {
-    if (!handle || !uid || !email) {
-        throw new Error("Invalid parameters for createUserHandle: handle, uid, and email are required.");
+export const createUserHandle = async (username, uid, email, isAdmin = false) => {
+    if (!username || !uid || !email) {
+        throw new Error("Invalid parameters for createUserHandle: username, uid, and email are required.");
     }
 
     const user = {
         uid,
         email,
-        handle,
+        username,
         isAdmin,
         createdOn: new Date().toISOString()
     };
 
-    await set(ref(db, `users/${handle}`), user);
+    await set(ref(db, `users/${username}`), user);
 };
 
 export const getUserData = async (uid) => {
