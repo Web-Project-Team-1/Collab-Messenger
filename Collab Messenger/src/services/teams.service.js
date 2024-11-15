@@ -1,4 +1,4 @@
-import { ref, set, push, get } from 'firebase/database';
+import { ref, set, push, get, update} from 'firebase/database';
 import { db } from '../config/firebase.config';
 
 export const createTeam = async (teamName, ownerId) => {
@@ -23,4 +23,20 @@ export const createTeam = async (teamName, ownerId) => {
 export const getAllTeams = async () => {
     const snapshot = await get(ref(db, 'teams'));
     return snapshot.val();
+};
+
+export const inviteUserToTeam = async (teamId, username) => {
+    const userRef = ref(db, `users/${username}`);
+    const snapshot = await get(userRef);
+
+    if (snapshot.exists()) {
+        const userData = snapshot.val();
+        const updates = {};
+        updates[`teams/${teamId}/teamMembers/${userData.uid}`] = true;
+        
+        await update(ref(db), updates);
+        return userData;
+    } else {
+        throw new Error("User not found.");
+    }
 };

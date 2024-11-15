@@ -1,11 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../store/app.context';
-import { createTeam, getAllTeams } from '../../services/teams.service';
+import { createTeam, getAllTeams, inviteUserToTeam } from '../../services/teams.service';
+import Chat from '../Chat/Chat';
 
 export default function TeamPage() {
     const [teams, setTeams] = useState([]);
     const [newTeamName, setNewTeamName] = useState('');
+    const [inviteUsername, setInviteUsername] = useState('');
+    const [activeTeamId, setActiveTeamId] = useState(null);
     const { user } = useContext(AppContext);
     const navigate = useNavigate();
 
@@ -35,7 +38,6 @@ export default function TeamPage() {
             alert('Please provide a team name');
             return;
         }
-
         try {
             await createTeam(newTeamName, user.uid);
             setNewTeamName('');
@@ -45,13 +47,31 @@ export default function TeamPage() {
         }
     };
 
+    const handleInviteUser = async () => {
+        if (!inviteUsername) {
+            alert('Please enter a username');
+            return;
+        }
+        try {
+            await inviteUserToTeam(activeTeamId, inviteUsername);
+            setInviteUsername('');
+        } catch (error) {
+            console.error('Error inviting user', error);
+            alert(error.message);
+        }
+    };
+
     return (
         <div className="team-page">
             <div className="team-sidebar">
                 <h2>Teams</h2>
                 <div className="team-list">
                     {teams.map(team => (
-                        <div key={team.id} className="team-item">
+                        <div
+                            key={team.id}
+                            className="team-item"
+                            onClick={() => setActiveTeamId(team.id)}
+                        >
                             {team.name}
                         </div>
                     ))}
@@ -67,6 +87,21 @@ export default function TeamPage() {
                 </div>
             </div>
             <div className="team-content">
+                {activeTeamId && (
+                    <>
+                        <h2>Team Chat</h2>
+                        <Chat teamId={activeTeamId} />
+                        <div className="invite-user">
+                            <input
+                                type="text"
+                                placeholder="Invite by username"
+                                value={inviteUsername}
+                                onChange={(e) => setInviteUsername(e.target.value)}
+                            />
+                            <button onClick={handleInviteUser}>Invite User</button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
