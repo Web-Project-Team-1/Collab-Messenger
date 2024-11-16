@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { ref, push, onValue } from 'firebase/database';
+import { ref, push, onValue, off } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { AppContext } from '../../store/app.context';
 
@@ -10,11 +10,15 @@ export default function Chat({ teamId }) {
 
     useEffect(() => {
         const messagesRef = ref(db, `teams/${teamId}/chat`);
-        onValue(messagesRef, (snapshot) => {
+        const listener = (snapshot) => {
             const data = snapshot.val();
             const loadedMessages = data ? Object.values(data) : [];
             setMessages(loadedMessages);
-        });
+        };
+        onValue(messagesRef, listener);
+        return () => {
+            off(messagesRef, 'value', listener);
+        };
     }, [teamId]);
 
     const sendMessage = async () => {
