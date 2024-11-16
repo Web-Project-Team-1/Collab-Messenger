@@ -2,8 +2,8 @@ import { Box, VStack, HStack, Input, Button, Text } from "@chakra-ui/react";
 import useChat from "../../components/chat/useChat";
 import './Chat.css';
 
-export default function Chat({ teamId }) {
-    const { message, setMessage, messages, sendMessage } = useChat(teamId);
+export default function Chat({ teamId, channelId }) {
+    const { message, setMessage, messages, sendMessage } = useChat(teamId, channelId);
 
     return (
         <VStack className="chatContainer" bg="gray.700" boxShadow="lg">

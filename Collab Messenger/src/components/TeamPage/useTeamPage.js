@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ref, push, onValue, off } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { AppContext } from '../../store/app.context';
+import { createTeam, inviteUserToTeam, createChannel } from '../../services/teams.service';
 
 export default function useTeamPage() {
     const { user } = useContext(AppContext);
@@ -10,6 +11,7 @@ export default function useTeamPage() {
     const [newTeamName, setNewTeamName] = useState('');
     const [inviteUsername, setInviteUsername] = useState('');
     const [activeTeamId, setActiveTeamId] = useState(null);
+    const [activeChannelId, setActiveChannelId] = useState(null);
     const [isCreatingTeam, setIsCreatingTeam] = useState(false);
     const navigate = useNavigate();
 
@@ -29,6 +31,10 @@ export default function useTeamPage() {
                 ? Object.keys(data).map((teamId) => ({
                       id: teamId,
                       name: data[teamId].name,
+                      channels: data[teamId].channels ? Object.keys(data[teamId].channels).map(channelId => ({
+                          id: channelId,
+                          name: data[teamId].channels[channelId].name
+                      })) : []
                   }))
                 : [];
             setTeams(loadedTeams);
@@ -44,18 +50,8 @@ export default function useTeamPage() {
         }
         setIsCreatingTeam(true);
         try {
-            const teamData = {
-                name: newTeamName,
-                createdBy: user.uid,
-                createdAt: Date.now(),
-            };
-            const teamsRef = ref(db, 'teams/');
-            const newTeamRef = push(teamsRef);
-            await newTeamRef.set(teamData);
-            setTeams((prevTeams) => [
-                ...prevTeams,
-                { id: newTeamRef.key, name: newTeamName },
-            ]);
+            const teamId = await createTeam(newTeamName, user.uid);
+            fetchTeams();
             setNewTeamName('');
             setIsCreatingTeam(false);
         } catch (error) {
@@ -70,7 +66,27 @@ export default function useTeamPage() {
             alert('Please enter a username');
             return;
         }
-        setInviteUsername('');
+        try {
+            await inviteUserToTeam(activeTeamId, inviteUsername);
+            setInviteUsername('');
+        } catch (error) {
+            console.error('Error inviting user', error);
+            alert('Error inviting user');
+        }
+    };
+
+    const handleCreateChannel = async (teamId, channelName, clearChannelInput) => {
+        if (!channelName) {
+            alert('Please provide a channel name');
+            return;
+        }
+        try {
+            await createChannel(teamId, channelName);
+            clearChannelInput('');
+        } catch (error) {
+            console.error('Error creating channel', error);
+            alert('Error creating channel');
+        }
     };
 
     return {
@@ -81,8 +97,11 @@ export default function useTeamPage() {
         setInviteUsername,
         activeTeamId,
         setActiveTeamId,
+        activeChannelId,
+        setActiveChannelId,
         isCreatingTeam,
         handleCreateTeam,
         handleInviteUser,
+        handleCreateChannel
     };
 }
