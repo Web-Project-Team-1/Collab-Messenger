@@ -53,7 +53,7 @@ const Register = () => {
       <div className="home-background"></div>
       <div className="content-container">
         <Box maxW="sm" w="full" p={6} borderRadius="md" boxShadow="lg" bg="gray.800" color="white">
-          <Heading as="h2" size="xl" textAlign="center" mb={4}>Sign up</Heading>
+          <Heading as="h2" size="xl" textAlign="center" mb={4}>Register</Heading>
           <Text textAlign="center" mb={4}>Fill in the form below to create an account</Text>
           <Stack gap="4" w="full">
             <Input

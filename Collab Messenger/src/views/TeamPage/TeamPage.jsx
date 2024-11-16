@@ -2,7 +2,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../store/app.context';
 import { createTeam, getAllTeams, inviteUserToTeam } from '../../services/teams.service';
+import { Box, Text, Input, Button, VStack } from '@chakra-ui/react';
 import Chat from '../Chat/Chat';
+import { Flex } from '@chakra-ui/react';
 
 export default function TeamPage() {
     const [teams, setTeams] = useState([]);
@@ -62,47 +64,53 @@ export default function TeamPage() {
     };
 
     return (
-        <div className="team-page">
-            <div className="team-sidebar">
-                <h2>Teams</h2>
-                <div className="team-list">
-                    {teams.map(team => (
-                        <div
+        <Flex direction="row" w='100%' h='100vh'>
+            <Box width="300px" borderRight="1px" borderColor="gray.200" p={4} flexShrink="0">
+                <Text fontSize="2xl" mb={4}>Teams</Text>
+                <VStack align="stretch" spacing={3}>
+                    {teams.map((team) => (
+                        <Button
                             key={team.id}
-                            className="team-item"
+                            variant="surface"
                             onClick={() => setActiveTeamId(team.id)}
+                            width="100%"
                         >
                             {team.name}
-                        </div>
+                        </Button>
                     ))}
-                </div>
-                <div className="create-team">
-                    <input
+                </VStack>
+                <Box mt={4}>
+                    <Input
                         type="text"
                         placeholder="Team Name"
                         value={newTeamName}
                         onChange={(e) => setNewTeamName(e.target.value)}
+                        mb={2}
                     />
-                    <button onClick={handleCreateTeam}>Create Team</button>
-                </div>
-            </div>
-            <div className="team-content">
+                    <Button onClick={handleCreateTeam} width="100%" variant='surface'>Create Team</Button>
+                </Box>
+            </Box>
+
+            <Box flex="1" p={4} display="flex" justifyContent="center" alignItems="center">
                 {activeTeamId && (
                     <>
-                        <h2>Team Chat</h2>
-                        <Chat teamId={activeTeamId} />
-                        <div className="invite-user">
-                            <input
-                                type="text"
-                                placeholder="Invite by username"
-                                value={inviteUsername}
-                                onChange={(e) => setInviteUsername(e.target.value)}
-                            />
-                            <button onClick={handleInviteUser}>Invite User</button>
-                        </div>
+                        <Text fontSize="2xl" mb={4}>Team Chat</Text>
+                        <Box w="80%" maxW="800px">
+                            <Chat teamId={activeTeamId} />
+                            <Box mt={4}>
+                                <Input
+                                    type="text"
+                                    placeholder="Invite by username"
+                                    value={inviteUsername}
+                                    onChange={(e) => setInviteUsername(e.target.value)}
+                                    mb={2}
+                                />
+                                <Button onClick={handleInviteUser} width="100%" variant='surface'>Invite User</Button>
+                            </Box>
+                        </Box>
                     </>
                 )}
-            </div>
-        </div>
+            </Box>
+        </Flex>
     );
 }
