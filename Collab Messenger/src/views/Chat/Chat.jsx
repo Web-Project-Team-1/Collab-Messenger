@@ -1,93 +1,104 @@
 import {
-    Box,
-    VStack,
-    HStack,
-    Input,
-    Button,
-    Text,
-  } from "@chakra-ui/react";
-  import { useState, useEffect, useContext } from "react";
-  import { ref, push, onValue, off } from "firebase/database";
-  import { db } from "../../config/firebase.config";
-  import { AppContext } from "../../store/app.context";
-  
-  export default function Chat({ teamId }) {
-    const { user } = useContext(AppContext);
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-  
-    useEffect(() => {
-      const messagesRef = ref(db, `teams/${teamId}/chat`);
-      const listener = (snapshot) => {
-        const data = snapshot.val();
-        const loadedMessages = data ? Object.values(data) : [];
-        setMessages(loadedMessages);
-      };
-      onValue(messagesRef, listener);
-      return () => {
-        off(messagesRef, "value", listener);
-      };
-    }, [teamId]);
-  
-    const sendMessage = async () => {
-      if (!message.trim()) return;
-  
-      const messageData = {
-        text: message,
-        senderId: user.uid,
-        username: user.email,
-        timestamp: Date.now(),
-      };
-  
-      const messagesRef = ref(db, `teams/${teamId}/chat`);
-      await push(messagesRef, messageData);
-      setMessage("");
+  Box,
+  VStack,
+  HStack,
+  Input,
+  Button,
+  Text,
+} from "@chakra-ui/react";
+import { useState, useEffect, useContext } from "react";
+import { ref, push, onValue, off } from "firebase/database";
+import { db } from "../../config/firebase.config";
+import { AppContext } from "../../store/app.context";
+
+export default function Chat({ teamId }) {
+  const { user } = useContext(AppContext);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const messagesRef = ref(db, `teams/${teamId}/chat`);
+    const listener = (snapshot) => {
+      const data = snapshot.val();
+      const loadedMessages = data ? Object.values(data) : [];
+      setMessages(loadedMessages);
     };
-  
-    return (
-      <VStack
-        spacing={6}
+    onValue(messagesRef, listener);
+    return () => {
+      off(messagesRef, "value", listener);
+    };
+  }, [teamId]);
+
+  const sendMessage = async () => {
+    if (!message.trim()) return;
+
+    const messageData = {
+      text: message,
+      senderId: user.uid,
+      username: user.email,
+      timestamp: Date.now(),
+    };
+
+    const messagesRef = ref(db, `teams/${teamId}/chat`);
+    await push(messagesRef, messageData);
+    setMessage("");
+  };
+
+  return (
+    <VStack
+      spacing={6}
+      p={6}
+      bg="gray.700"
+      borderRadius="lg"
+      boxShadow="lg"
+      w="1300px"
+      h="850px"
+      flexDirection="column"
+    >
+      {/* Scrollable chat messages */}
+      <Box
+        flex="1"
+        w="full"
         p={6}
-        bg="gray.700"
-        borderRadius="lg"
-        boxShadow="lg"
-        w="1300px"
-        h="550px"
+        bg="gray.800"
+        borderRadius="md"
+        overflowY="auto"
+        minHeight="450px"
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#4A5568",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#2D3748",
+          },
+        }}
       >
-        <Box
-          flex="1"
-          w="full"
-          p={6}
-          bg="gray.800"
-          borderRadius="md"
-          overflowY="auto"
-          maxHeight="450px"
-          css={{
-            "&::-webkit-scrollbar": {
-              width: "8px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "#4A5568",
-              borderRadius: "4px",
-            },
-            "&::-webkit-scrollbar-track": {
-              background: "#2D3748",
-            },
-          }}
-        >
-          {messages.map((msg, idx) => (
-            <Box
-              key={idx}
-              p={4}
-              mb={4}
-              bg="gray.600"
-              borderRadius="md"
-            >
-              <Text fontWeight="bold">{msg.username}:</Text>
-              <Text>{msg.text}</Text>
-            </Box>
-          ))}
-        </Box>
+        {messages.map((msg, idx) => (
+          <Box
+            key={idx}
+            p={1}
+            mb={1}
+            bg="transparent"
+            border="none"
+            borderRadius="none"
+          >
+            <Text fontWeight="bold" color="white">
+              {msg.username}:
+            </Text>
+            <Text color="white">{msg.text}</Text>
+          </Box>
+        ))}
+      </Box>
+
+      {/* Message input and send button at the bottom */}
+      <Box
+        w="full"
+        mt="auto"
+      >
         <HStack w="full">
           <Input
             value={message}
@@ -101,7 +112,7 @@ import {
             Send
           </Button>
         </HStack>
-      </VStack>
-    );
-  }
-  
+      </Box>
+    </VStack>
+  );
+}

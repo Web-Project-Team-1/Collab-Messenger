@@ -1,9 +1,10 @@
+// TeamPage.jsx
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, push, onValue, off } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { AppContext } from '../../store/app.context';
-import { Box, Text, VStack, HStack, Input, Button, Flex, Spinner } from '@chakra-ui/react';
+import { Box, Text, VStack, Input, Button, Flex, Spinner } from '@chakra-ui/react';
 import Chat from '../Chat/Chat';
 
 export default function TeamPage() {
@@ -82,7 +83,15 @@ export default function TeamPage() {
 
     return (
         <Flex direction="row" w="100%" h="100vh">
-            <Box width="300px" p={4} bg="gray.800" borderRight="1px" borderColor="gray.200" flexShrink="0">
+            <Box
+                width="150px"
+                p={4}
+                bg="gray.800"
+                borderRight="1px"
+                borderColor="gray.700"
+                flexShrink="0"
+                pt={16}
+            >
                 <Text fontSize="2xl" mb={4} color="white">Teams</Text>
                 <VStack align="stretch" spacing={3}>
                     {teams.map((team) => (
@@ -118,36 +127,50 @@ export default function TeamPage() {
                         {isCreatingTeam ? <Spinner size="sm" /> : 'Create Team'}
                     </Button>
                 </Box>
+
+                {/* Invite User Section */}
+                <Box mt={4}>
+                    <Input
+                        type="text"
+                        placeholder="Invite by username"
+                        value={inviteUsername}
+                        onChange={(e) => setInviteUsername(e.target.value)}
+                        mb={2}
+                        bg="gray.700"
+                        color="white"
+                        _placeholder={{ color: "gray.400" }}
+                    />
+                    <Button
+                        onClick={handleInviteUser}
+                        width="100%"
+                        variant="solid"
+                        colorScheme="teal"
+                    >
+                        Invite User
+                    </Button>
+                </Box>
             </Box>
 
-            <Box flex="1" p={4} display="flex" justifyContent="start" alignItems="center" bg="gray.700">
+            {/* Right Panel with Chat */}
+            <Box
+                flex="1"
+                p={4}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                bg="gray.700"
+                pt={16}
+            >
                 {activeTeamId && (
-                    <>
-                        <Box w="80%" maxW="800px">
-                            <Chat teamId={activeTeamId} />
-                            <Box mt={4}>
-                                <Input
-                                width='163%'
-                                    type="text"
-                                    placeholder="Invite by username"
-                                    value={inviteUsername}
-                                    onChange={(e) => setInviteUsername(e.target.value)}
-                                    mb={2}
-                                    bg="gray.600"
-                                    color="white"
-                                    _placeholder={{ color: "gray.400" }}
-                                />
-                                <Button
-                                    onClick={handleInviteUser}
-                                    width="163%"
-                                    variant="solid"
-                                    colorScheme="teal"
-                                >
-                                    Invite User
-                                </Button>
-                            </Box>
-                        </Box>
-                    </>
+                    <Box
+                        w="full"
+                        maxW="1200px"
+                        h="full"
+                        maxH="900px"
+                        border="none"
+                    >
+                        <Chat teamId={activeTeamId} />
+                    </Box>
                 )}
             </Box>
         </Flex>

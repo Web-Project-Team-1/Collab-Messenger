@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Header.css';
+import logo from '../../resources/headerlogo.png';
 
 function Header() {
     return (
@@ -12,7 +13,7 @@ function Header() {
                             to="/"
                             className={({ isActive }) => (isActive ? 'active-link' : '')}
                         >
-                            Home
+                            <img src={logo} alt="Connecto Logo" className="logo" />
                         </NavLink>
                     </li>
                 </ul>
