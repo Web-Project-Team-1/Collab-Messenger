@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/auth.service";
 import { createUserHandle, getUserByUsername } from "../../services/users.service";
 import "./Register.css";
+import { Card, Input, Stack } from "@chakra-ui/react"
+import { Field } from "../../components/ui/field"
+import { Button } from "@chakra-ui/react";
 
 export default function Register() {
   const [user, setUser] = useState({
@@ -48,16 +51,28 @@ export default function Register() {
 
   return (
     <div className="register-page">
-      <h1>Register</h1>
-      <label htmlFor="username">Username: </label>
-      <input value={user.username} onChange={updateUser('username')} type="text" name="username" id="username" />
-      <br /><br />
-      <label htmlFor="email">Email: </label>
-      <input value={user.email} onChange={updateUser('email')} type="text" name="email" id="email" />
-      <br /><br />
-      <label htmlFor="password">Password: </label>
-      <input value={user.password} onChange={updateUser('password')} type="password" name="password" id="password" />
-      <button onClick={register}>Register</button>
+      <Card.Root maxW="sm">
+        <Card.Header>
+          <Card.Title>Register</Card.Title>
+          <Card.Description>
+            Fill in the form below to create an account
+          </Card.Description>
+        </Card.Header>
+        <Card.Body>
+          <Stack gap="4" w="full">
+            <Field label="First Name">
+              <Input />
+            </Field>
+            <Field label="Last Name">
+              <Input />
+            </Field>
+          </Stack>
+        </Card.Body>
+        <Card.Footer justifyContent="flex-end">
+          <Button variant="outline">Cancel</Button>
+          <Button variant="ghost">Register</Button>
+        </Card.Footer>
+      </Card.Root>
     </div>
   );
 }
