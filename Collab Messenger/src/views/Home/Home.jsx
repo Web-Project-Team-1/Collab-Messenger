@@ -6,10 +6,13 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      <div className="home-background">
+      <div className="home-background"></div>
+      <div className="content-container">
         <h1>Welcome to Connecto!</h1>
-        <button className='buttons-home' onClick={() => navigate('/register')}>Go to Register</button>
-        <button className='buttons-home' onClick={() => navigate('/login')}>Go to Login</button>
+        <div className="buttons-home">
+          <button onClick={() => navigate('/register')}>Go to Register</button>
+          <button onClick={() => navigate('/login')}>Go to Login</button>
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
+import { Button, Input, Stack, Box, Heading, Text } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../store/app.context";
 import { loginUser } from "../../services/auth.service";
 import "./Login.css";
 
-export default function Login() {
+const Login = () => {
     const [credentials, setCredentials] = useState({
         email: '',
         password: ''
@@ -36,13 +37,40 @@ export default function Login() {
 
     return (
         <div className="login-page">
-            <h1>Login</h1>
-            <label htmlFor="email">Email: </label>
-            <input value={credentials.email} onChange={updateCredentials('email')} type="text" name="email" id="email" />
-            <br /><br />
-            <label htmlFor="password">Password: </label>
-            <input value={credentials.password} onChange={updateCredentials('password')} type="password" name="password" id="password" />
-            <button onClick={login}>Login</button>
+            <div className="home-background"></div>
+            <div className="content-container">
+                <Box maxW="sm" w="full" p={6} borderRadius="md" boxShadow="lg" bg="gray.800" color="white">
+                    <Heading as="h2" size="xl" textAlign="center" mb={4}>Login</Heading>
+                    <Text textAlign="center" mb={4}>Enter your credentials to log in</Text>
+                    <Stack gap="4" w="full">
+                        <Input
+                            placeholder="Email"
+                            value={credentials.email}
+                            onChange={updateCredentials('email')}
+                            bg="gray.700"
+                            _hover={{ bg: "gray.600" }}
+                            _focus={{ bg: "gray.600" }}
+                            color="white"
+                        />
+                        <Input
+                            type="password"
+                            placeholder="Password"
+                            value={credentials.password}
+                            onChange={updateCredentials('password')}
+                            bg="gray.700"
+                            _hover={{ bg: "gray.600" }}
+                            _focus={{ bg: "gray.600" }}
+                            color="white"
+                        />
+                    </Stack>
+                    <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
+                        <Button variant="outline" onClick={() => navigate('/')}>Cancel</Button>
+                        <Button variant="solid" onClick={login}>Login</Button>
+                    </Stack>
+                </Box>
+            </div>
         </div>
     );
-}
+};
+
+export default Login;
