@@ -1,17 +1,18 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ref, push, onValue, off } from 'firebase/database';
+import { db } from '../../config/firebase.config';
 import { AppContext } from '../../store/app.context';
-import { createTeam, getAllTeams, inviteUserToTeam } from '../../services/teams.service';
-import { Box, Text, Input, Button, VStack } from '@chakra-ui/react';
+import { Box, Text, VStack, HStack, Input, Button, Flex, Spinner } from '@chakra-ui/react';
 import Chat from '../Chat/Chat';
-import { Flex } from '@chakra-ui/react';
 
 export default function TeamPage() {
+    const { user } = useContext(AppContext);
     const [teams, setTeams] = useState([]);
     const [newTeamName, setNewTeamName] = useState('');
     const [inviteUsername, setInviteUsername] = useState('');
     const [activeTeamId, setActiveTeamId] = useState(null);
-    const { user } = useContext(AppContext);
+    const [isCreatingTeam, setIsCreatingTeam] = useState(false);  // Loading state for team creation
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,12 +25,17 @@ export default function TeamPage() {
 
     const fetchTeams = async () => {
         try {
-            const teamsData = await getAllTeams();
-            const teamsList = Object.keys(teamsData || {}).map(teamId => ({
-                id: teamId,
-                ...teamsData[teamId],
-            }));
-            setTeams(teamsList);
+            const teamsRef = ref(db, 'teams/');
+            const listener = (snapshot) => {
+                const data = snapshot.val();
+                const loadedTeams = data ? Object.keys(data).map(teamId => ({
+                    id: teamId,
+                    name: data[teamId].name
+                })) : [];
+                setTeams(loadedTeams);
+            };
+            onValue(teamsRef, listener);
+            return () => off(teamsRef, 'value', listener);
         } catch (error) {
             console.error('Error fetching teams', error);
         }
@@ -40,12 +46,23 @@ export default function TeamPage() {
             alert('Please provide a team name');
             return;
         }
+        setIsCreatingTeam(true);  // Show loading spinner
         try {
-            await createTeam(newTeamName, user.uid);
+            const teamData = {
+                name: newTeamName,
+                createdBy: user.uid,
+                createdAt: Date.now()
+            };
+            const teamsRef = ref(db, 'teams/');
+            const newTeamRef = push(teamsRef);
+            await newTeamRef.set(teamData);
+            setTeams(prevTeams => [...prevTeams, { id: newTeamRef.key, name: newTeamName }]);
             setNewTeamName('');
-            fetchTeams();
+            setIsCreatingTeam(false);  // Hide loading spinner
         } catch (error) {
             console.error('Error creating team', error);
+            alert('Error creating team');
+            setIsCreatingTeam(false);
         }
     };
 
@@ -55,7 +72,7 @@ export default function TeamPage() {
             return;
         }
         try {
-            await inviteUserToTeam(activeTeamId, inviteUsername);
+            // Your invite user logic goes here
             setInviteUsername('');
         } catch (error) {
             console.error('Error inviting user', error);
@@ -64,14 +81,15 @@ export default function TeamPage() {
     };
 
     return (
-        <Flex direction="row" w='100%' h='100vh'>
-            <Box width="300px" borderRight="1px" borderColor="gray.200" p={4} flexShrink="0">
-                <Text fontSize="2xl" mb={4}>Teams</Text>
+        <Flex direction="row" w="100%" h="100vh">
+            <Box width="300px" p={4} bg="gray.800" borderRight="1px" borderColor="gray.200" flexShrink="0">
+                <Text fontSize="2xl" mb={4} color="white">Teams</Text>
                 <VStack align="stretch" spacing={3}>
                     {teams.map((team) => (
                         <Button
                             key={team.id}
-                            variant="surface"
+                            variant="outline"
+                            colorScheme="teal"
                             onClick={() => setActiveTeamId(team.id)}
                             width="100%"
                         >
@@ -86,26 +104,47 @@ export default function TeamPage() {
                         value={newTeamName}
                         onChange={(e) => setNewTeamName(e.target.value)}
                         mb={2}
+                        bg="gray.700"
+                        color="white"
+                        _placeholder={{ color: "gray.400" }}
                     />
-                    <Button onClick={handleCreateTeam} width="100%" variant='surface'>Create Team</Button>
+                    <Button
+                        onClick={handleCreateTeam}
+                        width="100%"
+                        variant="solid"
+                        colorScheme="blue"
+                        disabled={isCreatingTeam}
+                    >
+                        {isCreatingTeam ? <Spinner size="sm" /> : 'Create Team'}
+                    </Button>
                 </Box>
             </Box>
 
-            <Box flex="1" p={4} display="flex" justifyContent="center" alignItems="center">
+            <Box flex="1" p={4} display="flex" justifyContent="start" alignItems="center" bg="gray.700">
                 {activeTeamId && (
                     <>
-                        <Text fontSize="2xl" mb={4}>Team Chat</Text>
                         <Box w="80%" maxW="800px">
                             <Chat teamId={activeTeamId} />
                             <Box mt={4}>
                                 <Input
+                                width='163%'
                                     type="text"
                                     placeholder="Invite by username"
                                     value={inviteUsername}
                                     onChange={(e) => setInviteUsername(e.target.value)}
                                     mb={2}
+                                    bg="gray.600"
+                                    color="white"
+                                    _placeholder={{ color: "gray.400" }}
                                 />
-                                <Button onClick={handleInviteUser} width="100%" variant='surface'>Invite User</Button>
+                                <Button
+                                    onClick={handleInviteUser}
+                                    width="163%"
+                                    variant="solid"
+                                    colorScheme="teal"
+                                >
+                                    Invite User
+                                </Button>
                             </Box>
                         </Box>
                     </>
