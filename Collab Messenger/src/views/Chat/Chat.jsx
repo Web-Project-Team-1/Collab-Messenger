@@ -1,118 +1,41 @@
-import {
-  Box,
-  VStack,
-  HStack,
-  Input,
-  Button,
-  Text,
-} from "@chakra-ui/react";
-import { useState, useEffect, useContext } from "react";
-import { ref, push, onValue, off } from "firebase/database";
-import { db } from "../../config/firebase.config";
-import { AppContext } from "../../store/app.context";
+import { Box, VStack, HStack, Input, Button, Text } from "@chakra-ui/react";
+import useChat from "../../components/chat/useChat";
+import './Chat.css';
 
 export default function Chat({ teamId }) {
-  const { user } = useContext(AppContext);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+    const { message, setMessage, messages, sendMessage } = useChat(teamId);
 
-  useEffect(() => {
-    const messagesRef = ref(db, `teams/${teamId}/chat`);
-    const listener = (snapshot) => {
-      const data = snapshot.val();
-      const loadedMessages = data ? Object.values(data) : [];
-      setMessages(loadedMessages);
-    };
-    onValue(messagesRef, listener);
-    return () => {
-      off(messagesRef, "value", listener);
-    };
-  }, [teamId]);
+    return (
+        <VStack className="chatContainer" bg="gray.700" boxShadow="lg">
+            {/* Scrollable chat messages */}
+            <Box className="messageContainer" bg="gray.800">
+                {messages.map((msg, idx) => (
+                    <Box key={idx} p={1} mb={1} bg="transparent" border="none" borderRadius="none">
+                        <Text fontWeight="bold" color="white">
+                            {msg.username}:
+                        </Text>
+                        <Text color="white">{msg.text}</Text>
+                    </Box>
+                ))}
+            </Box>
 
-  const sendMessage = async () => {
-    if (!message.trim()) return;
-
-    const messageData = {
-      text: message,
-      senderId: user.uid,
-      username: user.email,
-      timestamp: Date.now(),
-    };
-
-    const messagesRef = ref(db, `teams/${teamId}/chat`);
-    await push(messagesRef, messageData);
-    setMessage("");
-  };
-
-  return (
-    <VStack
-      spacing={6}
-      p={6}
-      bg="gray.700"
-      borderRadius="lg"
-      boxShadow="lg"
-      w="1300px"
-      h="850px"
-      flexDirection="column"
-    >
-      {/* Scrollable chat messages */}
-      <Box
-        flex="1"
-        w="full"
-        p={6}
-        bg="gray.800"
-        borderRadius="md"
-        overflowY="auto"
-        minHeight="450px"
-        css={{
-          "&::-webkit-scrollbar": {
-            width: "8px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "#4A5568",
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-track": {
-            background: "#2D3748",
-          },
-        }}
-      >
-        {messages.map((msg, idx) => (
-          <Box
-            key={idx}
-            p={1}
-            mb={1}
-            bg="transparent"
-            border="none"
-            borderRadius="none"
-          >
-            <Text fontWeight="bold" color="white">
-              {msg.username}:
-            </Text>
-            <Text color="white">{msg.text}</Text>
-          </Box>
-        ))}
-      </Box>
-
-      {/* Message input and send button at the bottom */}
-      <Box
-        w="full"
-        mt="auto"
-      >
-        <HStack w="full">
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message"
-            bg="gray.600"
-            border="none"
-            _placeholder={{ color: "gray.400" }}
-          />
-          <Button colorScheme="blue" onClick={sendMessage}>
-            Send
-          </Button>
-        </HStack>
-      </Box>
-    </VStack>
-  );
+            {/* Message input and send button at the bottom */}
+            <Box className="inputContainer">
+                <HStack w="full">
+                    <Input
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Type a message"
+                        className="inputField"
+                        bg="gray.600"
+                        border="none"
+                        _placeholder={{ color: "gray.400" }}
+                    />
+                    <Button className="sendButton" colorScheme="blue" onClick={sendMessage}>
+                        Send
+                    </Button>
+                </HStack>
+            </Box>
+        </VStack>
+    );
 }
