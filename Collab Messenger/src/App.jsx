@@ -9,7 +9,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { getUserData } from './services/users.service';
 import Home from './views/Home/Home';
 import Header from './components/Header/Header';
-import TeamPage from './views/TeamPage/TeamPage';
+import TeamPageLayout from './views/TeamPage/TeamPageLayout';
 
 if (process.env.NODE_ENV === "development") {
   const originalWarn = console.warn;
@@ -62,7 +62,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/teams" element={<TeamPage />} />
+          <Route path="/teams" element={<TeamPageLayout />} />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>
