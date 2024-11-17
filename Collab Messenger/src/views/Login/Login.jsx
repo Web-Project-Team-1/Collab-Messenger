@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../store/app.context";
 import { loginUser } from "../../services/auth.service";
+import { getUserData } from "../../services/users.service";
 import "./Login.css";
 
 const Login = () => {
@@ -20,7 +21,11 @@ const Login = () => {
 
         try {
             const userCredential = await loginUser(credentials.email, credentials.password);
-            setAppState({ user: userCredential.user, userData: null });
+            const firebaseUser = userCredential.user;
+
+            const userData = await getUserData(firebaseUser.uid);
+            setAppState({ user: firebaseUser, userData });
+
             navigate('/teams');
         } catch (error) {
             console.error('Login failed', error);

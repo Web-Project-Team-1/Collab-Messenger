@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppContext } from './store/app.context';
 import Register from './views/Register/Register';
 import Login from './views/Login/Login';
@@ -10,6 +10,7 @@ import { getUserData } from './services/users.service';
 import Home from './views/Home/Home';
 import Header from './components/Header/Header';
 import TeamPageLayout from './views/TeamPage/TeamPageLayout';
+import Profile from "./views/Profile/Profile";
 
 if (process.env.NODE_ENV === "development") {
   const originalWarn = console.warn;
@@ -39,20 +40,19 @@ function App() {
   }, [user, appState.user]);
 
   useEffect(() => {
-    if (!user) return;
-
-    getUserData(user.uid)
-      .then((data) => {
-        if (data) {
-          const userData = data[Object.keys(data)[0]];
-          setAppState((prevState) => ({
-            ...prevState,
-            userData,
-          }));
-        }
-      })
-      .catch(console.error);
-  }, [user]);
+    if (user && !appState.userData) {
+      getUserData(user.uid)
+        .then((data) => {
+          if (data) {
+            setAppState((prevState) => ({
+              ...prevState,
+              userData: data,
+            }));
+          }
+        })
+        .catch(console.error);
+    }
+  }, [user, appState.userData]);
 
   return (
     <AppContext.Provider value={{ ...appState, setAppState }}>
@@ -63,6 +63,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/teams" element={<TeamPageLayout />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

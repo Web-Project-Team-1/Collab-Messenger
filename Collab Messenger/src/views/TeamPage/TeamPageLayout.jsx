@@ -1,8 +1,11 @@
-import { Box, Text, VStack, Input, Button, Spinner } from '@chakra-ui/react';
-import Chat from '../Chat/Chat';
-import useTeamPage from '../../components/TeamPage/useTeamPage';
-import './TeamPageLayout.css';
-import { useState } from 'react';
+// components/TeamPage/TeamPageLayout.jsx
+
+import { Box, Text, VStack, Input, Button, Spinner } from "@chakra-ui/react";
+import Chat from "../Chat/Chat";
+import useTeamPage from "../../components/TeamPage/useTeamPage";
+import UserInfo from "../../components/UserInfo/UserInfo"; // Import the UserInfo component
+import { useState } from "react";
+import "./TeamPageLayout.css";
 
 export default function TeamPageLayout() {
     const {
@@ -21,10 +24,11 @@ export default function TeamPageLayout() {
         handleCreateChannel,
     } = useTeamPage();
 
-    const [newChannelName, setNewChannelName] = useState('');
+    const [newChannelName, setNewChannelName] = useState("");
 
     return (
         <div className="teamPageContainer">
+            {/* Sidebar for Teams and Channels */}
             <Box className="sidebar" p={4} bg="gray.800" borderRight="1px" borderColor="gray.700">
                 <Text fontSize="2xl" mb={4} color="white">
                     Teams
@@ -53,7 +57,7 @@ export default function TeamPageLayout() {
                         mb={2}
                         bg="gray.700"
                         color="white"
-                        _placeholder={{ color: 'gray.400' }}
+                        _placeholder={{ color: "gray.400" }}
                     />
                     <Button
                         onClick={handleCreateTeam}
@@ -62,26 +66,30 @@ export default function TeamPageLayout() {
                         colorScheme="blue"
                         disabled={isCreatingTeam}
                     >
-                        {isCreatingTeam ? <Spinner size="sm" /> : 'Create Team'}
+                        {isCreatingTeam ? <Spinner size="sm" /> : "Create Team"}
                     </Button>
                 </Box>
 
                 {/* Channels Section for Active Team */}
                 {activeTeamId && (
                     <Box mt={4}>
-                        <Text fontSize="lg" color="white" mb={2}>Channels</Text>
+                        <Text fontSize="lg" color="white" mb={2}>
+                            Channels
+                        </Text>
                         <VStack align="stretch" spacing={2}>
-                            {teams.find(team => team.id === activeTeamId)?.channels?.map((channel) => (
-                                <Button
-                                    key={channel.id}
-                                    variant="outline"
-                                    colorScheme="teal"
-                                    onClick={() => setActiveChannelId(channel.id)}
-                                    width="100%"
-                                >
-                                    {channel.name}
-                                </Button>
-                            ))}
+                            {teams
+                                .find((team) => team.id === activeTeamId)
+                                ?.channels?.map((channel) => (
+                                    <Button
+                                        key={channel.id}
+                                        variant="outline"
+                                        colorScheme="teal"
+                                        onClick={() => setActiveChannelId(channel.id)}
+                                        width="100%"
+                                    >
+                                        {channel.name}
+                                    </Button>
+                                ))}
                         </VStack>
 
                         {/* Create Channel Section */}
@@ -94,7 +102,7 @@ export default function TeamPageLayout() {
                                 mb={2}
                                 bg="gray.700"
                                 color="white"
-                                _placeholder={{ color: 'gray.400' }}
+                                _placeholder={{ color: "gray.400" }}
                             />
                             <Button
                                 onClick={() => handleCreateChannel(activeTeamId, newChannelName, setNewChannelName)}
@@ -108,7 +116,7 @@ export default function TeamPageLayout() {
                     </Box>
                 )}
 
-                {/* Invite User Section - Now below Channels */}
+                {/* Invite User Section */}
                 <Box mt={4}>
                     <Input
                         type="text"
@@ -118,14 +126,9 @@ export default function TeamPageLayout() {
                         mb={2}
                         bg="gray.700"
                         color="white"
-                        _placeholder={{ color: 'gray.400' }}
+                        _placeholder={{ color: "gray.400" }}
                     />
-                    <Button
-                        onClick={handleInviteUser}
-                        width="100%"
-                        variant="solid"
-                        colorScheme="teal"
-                    >
+                    <Button onClick={handleInviteUser} width="100%" variant="solid" colorScheme="teal">
                         Invite User
                     </Button>
                 </Box>
@@ -139,6 +142,9 @@ export default function TeamPageLayout() {
                     </Box>
                 )}
             </Box>
+
+            {/* Bottom-right UserInfo component */}
+            <UserInfo />
         </div>
     );
 }
