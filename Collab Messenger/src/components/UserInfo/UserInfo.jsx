@@ -3,7 +3,7 @@ import { FaCog } from "react-icons/fa";
 import { useContext } from "react";
 import { AppContext } from "../../store/app.context";
 import { useNavigate } from "react-router-dom";
-import UserInfo from "../UserInfo/UserInfo.css"
+import "./UserInfo.css";
 
 export default function UserInfo() {
     const { userData } = useContext(AppContext);

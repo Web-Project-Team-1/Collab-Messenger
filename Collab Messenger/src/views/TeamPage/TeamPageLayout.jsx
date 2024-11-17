@@ -1,9 +1,7 @@
-// components/TeamPage/TeamPageLayout.jsx
-
 import { Box, Text, VStack, Input, Button, Spinner } from "@chakra-ui/react";
 import Chat from "../Chat/Chat";
 import useTeamPage from "../../components/TeamPage/useTeamPage";
-import UserInfo from "../../components/UserInfo/UserInfo"; // Import the UserInfo component
+import UserInfo from "../../components/UserInfo/UserInfo";
 import { useState } from "react";
 import "./TeamPageLayout.css";
 
@@ -25,11 +23,27 @@ export default function TeamPageLayout() {
     } = useTeamPage();
 
     const [newChannelName, setNewChannelName] = useState("");
+    const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);
+    const activeTeamName = teams.find((team) => team.id === activeTeamId)?.name || "Select a Team";
+
+    const handleCreateTeamClick = () => {
+        setShowCreateTeamInput(true);
+    };
+
+    const handleCreateTeamCancel = () => {
+        setShowCreateTeamInput(false);
+        setNewTeamName("");
+    };
+
+    const handleCreateTeamSubmit = () => {
+        handleCreateTeam();
+        setShowCreateTeamInput(false);
+    };
 
     return (
         <div className="teamPageContainer">
-            {/* Sidebar for Teams and Channels */}
-            <Box className="sidebar" p={4} bg="gray.800" borderRight="1px" borderColor="gray.700">
+            {/* Teams Sidebar */}
+            <Box className="sidebar" p={4} bg="gray.900" borderRight="1px solid gray.700">
                 <Text fontSize="2xl" mb={4} color="white">
                     Teams
                 </Text>
@@ -41,83 +55,86 @@ export default function TeamPageLayout() {
                             colorScheme="teal"
                             onClick={() => setActiveTeamId(team.id)}
                             width="100%"
+                            border="1px solid"
+                            borderColor={team.id === activeTeamId ? "blue.500" : "gray.600"}
+                            bg={team.id === activeTeamId ? "gray.700" : "gray.800"}
+                            _hover={{ bg: "gray.600" }}
                         >
                             {team.name}
                         </Button>
                     ))}
                 </VStack>
 
-                {/* Create Team Section */}
-                <Box mt={4}>
-                    <Input
-                        type="text"
-                        placeholder="Team Name"
-                        value={newTeamName}
-                        onChange={(e) => setNewTeamName(e.target.value)}
-                        mb={2}
-                        bg="gray.700"
-                        color="white"
-                        _placeholder={{ color: "gray.400" }}
-                    />
-                    <Button
-                        onClick={handleCreateTeam}
-                        width="100%"
-                        variant="solid"
-                        colorScheme="blue"
-                        disabled={isCreatingTeam}
+                {/* Create Team Button */}
+                <Button
+                    onClick={handleCreateTeamClick}
+                    width="100%"
+                    variant="solid"
+                    colorScheme="blue"
+                    mt={4}
+                >
+                    Create Team
+                </Button>
+
+                {/* Team Name Input Overlay */}
+                {showCreateTeamInput && (
+                    <Box
+                        className="createTeamOverlay"
+                        position="absolute"
+                        top="150px"
+                        left="150px"
+                        p={2}
+                        bg="gray.800"
+                        borderRadius="md"
+                        boxShadow="lg"
+                        zIndex="10"
+                        border="1px solid"
+                        borderColor={"blue.500"}
                     >
-                        {isCreatingTeam ? <Spinner size="sm" /> : "Create Team"}
-                    </Button>
-                </Box>
-
-                {/* Channels Section for Active Team */}
-                {activeTeamId && (
-                    <Box mt={4}>
-                        <Text fontSize="lg" color="white" mb={2}>
-                            Channels
-                        </Text>
-                        <VStack align="stretch" spacing={2}>
-                            {teams
-                                .find((team) => team.id === activeTeamId)
-                                ?.channels?.map((channel) => (
-                                    <Button
-                                        key={channel.id}
-                                        variant="outline"
-                                        colorScheme="teal"
-                                        onClick={() => setActiveChannelId(channel.id)}
-                                        width="100%"
-                                    >
-                                        {channel.name}
-                                    </Button>
-                                ))}
-                        </VStack>
-
-                        {/* Create Channel Section */}
-                        <Box mt={4}>
-                            <Input
-                                type="text"
-                                placeholder="New Channel Name"
-                                value={newChannelName}
-                                onChange={(e) => setNewChannelName(e.target.value)}
-                                mb={2}
-                                bg="gray.700"
-                                color="white"
-                                _placeholder={{ color: "gray.400" }}
-                            />
-                            <Button
-                                onClick={() => handleCreateChannel(activeTeamId, newChannelName, setNewChannelName)}
-                                width="100%"
-                                variant="solid"
-                                colorScheme="teal"
-                            >
-                                Create Channel
-                            </Button>
-                        </Box>
+                        <Text color="white" mb={2}>Enter Team Name</Text>
+                        <Input
+                            type="text"
+                            placeholder="Team Name"
+                            value={newTeamName}
+                            onChange={(e) => setNewTeamName(e.target.value)}
+                            mb={2}
+                            bg="gray.700"
+                            color="white"
+                            _placeholder={{ color: "gray.400" }}
+                        />
+                        <Button
+                            onClick={handleCreateTeamSubmit}
+                            width="100%"
+                            variant="solid"
+                            colorScheme="blue"
+                            mb={2}
+                            isLoading={isCreatingTeam}
+                        >
+                            Create
+                        </Button>
+                        <Button
+                            onClick={handleCreateTeamCancel}
+                            width="100%"
+                            variant="outline"
+                            colorScheme="gray"
+                        >
+                            Cancel
+                        </Button>
                     </Box>
                 )}
+            </Box>
+
+            {/* Divider Line */}
+            <Box width="1px" bg="gray.600" /> {/* Divider between Teams and Channels sidebar */}
+
+            {/* Channels Sidebar */}
+            <Box className="channelSidebar" p={4} bg="gray.800" borderRight="1px solid gray.700">
+                <Text fontSize="xl" color="white" fontWeight="bold" mb={2}>
+                    {activeTeamName}
+                </Text>
 
                 {/* Invite User Section */}
-                <Box mt={4}>
+                <Box mt={4} mb={4}>
                     <Input
                         type="text"
                         placeholder="Invite by username"
@@ -130,6 +147,51 @@ export default function TeamPageLayout() {
                     />
                     <Button onClick={handleInviteUser} width="100%" variant="solid" colorScheme="teal">
                         Invite User
+                    </Button>
+                </Box>
+
+                <Text fontSize="lg" color="white" mb={2}>
+                    Channels
+                </Text>
+                <VStack align="stretch" spacing={2}>
+                    {teams
+                        .find((team) => team.id === activeTeamId)
+                        ?.channels?.map((channel) => (
+                            <Button
+                                key={channel.id}
+                                variant="outline"
+                                colorScheme="teal"
+                                onClick={() => setActiveChannelId(channel.id)}
+                                width="100%"
+                                border="1px solid"
+                                borderColor={channel.id === activeChannelId ? "blue.500" : "gray.600"}
+                                bg={channel.id === activeChannelId ? "gray.700" : "gray.800"}
+                                _hover={{ bg: "gray.600" }}
+                            >
+                                {channel.name}
+                            </Button>
+                        ))}
+                </VStack>
+
+                {/* Create Channel Section */}
+                <Box mt={4}>
+                    <Input
+                        type="text"
+                        placeholder="New Channel Name"
+                        value={newChannelName}
+                        onChange={(e) => setNewChannelName(e.target.value)}
+                        mb={2}
+                        bg="gray.700"
+                        color="white"
+                        _placeholder={{ color: "gray.400" }}
+                    />
+                    <Button
+                        onClick={() => handleCreateChannel(activeTeamId, newChannelName, setNewChannelName)}
+                        width="100%"
+                        variant="solid"
+                        colorScheme="teal"
+                    >
+                        Create Channel
                     </Button>
                 </Box>
             </Box>

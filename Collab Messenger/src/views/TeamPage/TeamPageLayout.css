@@ -14,7 +14,16 @@
     flex-shrink: 0;
     padding-top: 64px;
     margin-top: 50px;
-    /* Same as pt={16} */
+}
+
+/* Channel sidebar container */
+.channelSidebar {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    flex-shrink: 0;
+    padding-top: 64px;
+    margin-top: 60px;
 }
 
 /* Chat container */
@@ -24,7 +33,6 @@
     justify-content: center;
     align-items: center;
     padding-top: 64px;
-    /* Same as pt={16} */
 }
 
 /* Wrapper for chat content */
@@ -40,4 +48,23 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+/* Add border and spacing around each team and channel button */
+.teamButton,
+.channelButton {
+    border: 1px solid #4A5568;
+    /* Chakra's gray.600 */
+    border-radius: 5px;
+}
+
+/* Highlight selected team and channel */
+.sidebar .teamButton[data-active="true"],
+.channelSidebar .channelButton[data-active="true"] {
+    background-color: teal;
+    color: white;
+}
+
+.createTeamOverlay {
+    width: 250px;
 }
