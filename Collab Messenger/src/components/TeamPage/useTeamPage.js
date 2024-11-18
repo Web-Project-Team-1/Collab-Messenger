@@ -27,17 +27,21 @@ export default function useTeamPage() {
         const teamsRef = ref(db, 'teams/');
         const listener = (snapshot) => {
             const data = snapshot.val();
-            const loadedTeams = data
-                ? Object.keys(data).map((teamId) => ({
-                      id: teamId,
-                      name: data[teamId].name,
-                      channels: data[teamId].channels ? Object.keys(data[teamId].channels).map(channelId => ({
-                          id: channelId,
-                          name: data[teamId].channels[channelId].name
-                      })) : []
-                  }))
+            const userTeams = data
+                ? Object.keys(data)
+                      .filter((teamId) => data[teamId]?.members?.[user.uid]) 
+                      .map((teamId) => ({
+                          id: teamId,
+                          name: data[teamId].name,
+                          channels: data[teamId].channels
+                              ? Object.keys(data[teamId].channels).map((channelId) => ({
+                                    id: channelId,
+                                    name: data[teamId].channels[channelId].name,
+                                }))
+                              : [],
+                      }))
                 : [];
-            setTeams(loadedTeams);
+            setTeams(userTeams);
         };
         onValue(teamsRef, listener);
         return () => off(teamsRef, 'value', listener);
