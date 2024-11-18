@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref, push, onValue, off } from 'firebase/database';
+import { ref, push, onValue, off, get } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { AppContext } from '../../store/app.context';
 import { createTeam, inviteUserToTeam, createChannel } from '../../services/teams.service';
+import { getUserData } from '../../services/users.service';
 
 export default function useTeamPage() {
+
     const { user } = useContext(AppContext);
     const [teams, setTeams] = useState([]);
     const [newTeamName, setNewTeamName] = useState('');
@@ -25,23 +27,33 @@ export default function useTeamPage() {
 
     const fetchTeams = async () => {
         const teamsRef = ref(db, 'teams/');
-        const listener = (snapshot) => {
+        const listener = async (snapshot) => {
             const data = snapshot.val();
             const userTeams = data
-                ? Object.keys(data)
-                      .filter((teamId) => data[teamId]?.members?.[user.uid]) 
-                      .map((teamId) => ({
-                          id: teamId,
-                          name: data[teamId].name,
-                          channels: data[teamId].channels
-                              ? Object.keys(data[teamId].channels).map((channelId) => ({
+                ? await Promise.all(
+                    Object.keys(data)
+                        .filter((teamId) => data[teamId]?.members?.[user.uid]) 
+                        .map(async (teamId) => {
+                            const team = data[teamId];
+                            const memberUsernames = await Promise.all(
+                                Object.keys(team.members).map(async (memberId) => {
+                                    const memberData = await getUserData(memberId);
+                                    return memberData ? memberData.username : memberId; 
+                                })
+                            );
+                            return {
+                                id: teamId,
+                                name: team.name,
+                                channels: team.channels ? Object.keys(team.channels).map((channelId) => ({
                                     id: channelId,
-                                    name: data[teamId].channels[channelId].name,
-                                }))
-                              : [],
-                      }))
+                                    name: team.channels[channelId].name,
+                                })) : [],
+                                members: memberUsernames, 
+                            };
+                        })
+                )
                 : [];
-            setTeams(userTeams);
+            setTeams(userTeams); 
         };
         onValue(teamsRef, listener);
         return () => off(teamsRef, 'value', listener);

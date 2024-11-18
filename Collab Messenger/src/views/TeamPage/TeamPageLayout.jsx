@@ -2,7 +2,8 @@ import { Box, Text, VStack, Button, Input, Spinner } from "@chakra-ui/react";
 import Chat from "../Chat/Chat";
 import useTeamPage from "../../components/TeamPage/useTeamPage";
 import UserInfo from "../../components/UserInfo/UserInfo";
-import { useState } from "react";
+import { act, useState } from "react";
+import { useEffect } from "react";
 import Channels from "../Channels/Channels";
 import "./TeamPageLayout.css";
 
@@ -23,10 +24,12 @@ export default function TeamPageLayout() {
         handleCreateChannel,
     } = useTeamPage();
 
+
     const [newChannelName, setNewChannelName] = useState("");
     const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);
     const [showCreateChannelInput, setShowCreateChannelInput] = useState(false);
     const [showInviteUserInput, setShowInviteUserInput] = useState(false);
+    const [members, setMembers] = useState([]);
 
     const handleCreateTeamClick = () => setShowCreateTeamInput(true);
     const handleCreateTeamCancel = () => {
@@ -37,6 +40,16 @@ export default function TeamPageLayout() {
         handleCreateTeam();
         setShowCreateTeamInput(false);
     };
+
+    const team = teams[activeTeamId];
+
+    useEffect(() => {
+        if (team) {
+            setMembers(team.members); 
+        }
+    }, [team]);
+
+
 
     return (
         <div className="teamPageContainer">
@@ -154,6 +167,7 @@ export default function TeamPageLayout() {
 
             {/* Bottom-right UserInfo component */}
             <UserInfo />
+           
         </div>
     );
 }
