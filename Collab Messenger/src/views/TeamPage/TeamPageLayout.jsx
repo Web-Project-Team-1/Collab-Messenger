@@ -30,7 +30,7 @@ export default function TeamPageLayout() {
     const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);
     const [showCreateChannelInput, setShowCreateChannelInput] = useState(false);
     const [showInviteUserInput, setShowInviteUserInput] = useState(false);
-    
+
     const handleCreateTeamClick = () => setShowCreateTeamInput(true);
     const handleCreateTeamCancel = () => {
         setShowCreateTeamInput(false);
@@ -40,7 +40,18 @@ export default function TeamPageLayout() {
         handleCreateTeam();
         setShowCreateTeamInput(false);
     };
-
+    const setActiveTeamIdWithDefaultChannel = (teamId) => {
+        setActiveTeamId(teamId);
+        const selectedTeam = teams.find((team) => team.id === teamId);
+        if (selectedTeam && selectedTeam.channels.length > 0) {
+            const generalChannel = selectedTeam.channels.find(
+                (channel) => channel.name.toLowerCase() === "general"
+            );
+            setActiveChannelId(generalChannel ? generalChannel.id : selectedTeam.channels[0].id);
+        } else {
+            setActiveChannelId(null); 
+        }
+    };
     return (
         <div className="teamPageContainer">
             {/* Teams Sidebar */}
@@ -54,7 +65,7 @@ export default function TeamPageLayout() {
                             key={team.id}
                             variant="outline"
                             colorScheme="teal"
-                            onClick={() => setActiveTeamId(team.id)}
+                            onClick={() => setActiveTeamIdWithDefaultChannel(team.id)}
                             width="100%"
                             border="1px solid"
                             borderColor={team.id === activeTeamId ? "blue.500" : "gray.600"}

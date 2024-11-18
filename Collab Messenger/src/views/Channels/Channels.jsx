@@ -109,16 +109,15 @@ export default function Channels({
             <Text fontSize="lg" color="white" mb={2}>
                 Channels
             </Text>
-            <VStack align="stretch" spacing={2}>
+            <VStack align="stretch" spacing={3}>
                 {teams
                     .find((team) => team.id === activeTeamId)
-                    ?.channels?.map((channel) => (
+                    ?.channels.map((channel) => (
                         <Button
                             key={channel.id}
                             variant="outline"
                             colorScheme="teal"
                             onClick={() => setActiveChannelId(channel.id)}
-                            width="100%"
                             border="1px solid"
                             borderColor={channel.id === activeChannelId ? "blue.500" : "gray.600"}
                             bg={channel.id === activeChannelId ? "gray.700" : "gray.800"}
