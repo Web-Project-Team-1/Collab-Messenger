@@ -1,4 +1,4 @@
-import { Box, Text, VStack, Input, Button, Spinner, Flex } from "@chakra-ui/react";
+import { Box, Text, VStack, Input, Button, Spinner } from "@chakra-ui/react";
 import Chat from "../Chat/Chat";
 import useTeamPage from "../../components/TeamPage/useTeamPage";
 import UserInfo from "../../components/UserInfo/UserInfo";
@@ -8,7 +8,6 @@ import "./TeamPageLayout.css";
 export default function TeamPageLayout() {
     const {
         teams,
-        teamMembers,
         newTeamName,
         setNewTeamName,
         inviteUsername,
@@ -292,36 +291,17 @@ export default function TeamPageLayout() {
                 )}
             </Box>
 
-            {/* Divider Line */}
-            <Box width="1px" bg="gray.600" />
-
-            {/* Chat Component */}
-            <Box className="chatContainer" p={4} flex="1" bg="gray.800">
-                <Text fontSize="xl" color="white" fontWeight="bold" mb={4}>
-                    {activeTeamName} - Chat
-                </Text>
-                <Chat />
+            {/* Right Panel with Chat */}
+            <Box className="chatContainer" bg="gray.700">
+                {activeTeamId && activeChannelId && (
+                    <Box className="chatWrapper">
+                        <Chat teamId={activeTeamId} channelId={activeChannelId} />
+                    </Box>
+                )}
             </Box>
 
-            {/* Team Members */}
-            <Flex direction="column" align="start" p={4} bg="gray.700" width="300px">
-                <Text fontSize="xl" color="white" fontWeight="bold" mb={2}>
-                    Team Members
-                </Text>
-                <Flex direction="row" wrap="wrap" gap={2}>
-                    {teamMembers.map((member) => (
-                        <Text
-                            key={member.id}
-                            color="white"
-                            bg="gray.600"
-                            borderRadius="md"
-                            p={2}
-                        >
-                            {member.username}
-                        </Text>
-                    ))}
-                </Flex>
-            </Flex>
+            {/* Bottom-right UserInfo component */}
+            <UserInfo />
         </div>
     );
 }
