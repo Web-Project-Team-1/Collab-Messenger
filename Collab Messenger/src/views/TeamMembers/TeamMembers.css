@@ -1,0 +1,41 @@
+
+/* Members container for team members on the right */
+.team-members-container {
+    margin-top: 10px;
+    padding: 10px;
+    width: 250px;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.teamMember {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: white;
+    transition: color 0.3s ease;
+    border: 2px solid #445;
+    border-radius:20px ;
+    padding: 6px;
+    width: 130px;
+    margin-bottom: 9px;
+    cursor: pointer;
+}
+
+.teamMember:hover {
+    color: #007bff; 
+}
+
+.team-members-text {
+    margin-bottom: 10px;
+    margin-top: 8px;
+    color: white;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.membersContainer {
+    width: 200px;
+}

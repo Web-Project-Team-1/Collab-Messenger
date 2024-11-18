@@ -55,3 +55,9 @@
 .createTeamOverlay {
     width: 250px;
 }
+
+.members {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px ;
+}

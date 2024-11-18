@@ -6,6 +6,7 @@ import { act, useState } from "react";
 import { useEffect } from "react";
 import Channels from "../Channels/Channels";
 import "./TeamPageLayout.css";
+import TeamMembers from "../TeamMembers/TeamMembers";
 
 export default function TeamPageLayout() {
     const {
@@ -29,8 +30,7 @@ export default function TeamPageLayout() {
     const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);
     const [showCreateChannelInput, setShowCreateChannelInput] = useState(false);
     const [showInviteUserInput, setShowInviteUserInput] = useState(false);
-    const [members, setMembers] = useState([]);
-
+    
     const handleCreateTeamClick = () => setShowCreateTeamInput(true);
     const handleCreateTeamCancel = () => {
         setShowCreateTeamInput(false);
@@ -40,16 +40,6 @@ export default function TeamPageLayout() {
         handleCreateTeam();
         setShowCreateTeamInput(false);
     };
-
-    const team = teams[activeTeamId];
-
-    useEffect(() => {
-        if (team) {
-            setMembers(team.members); 
-        }
-    }, [team]);
-
-
 
     return (
         <div className="teamPageContainer">
@@ -167,6 +157,15 @@ export default function TeamPageLayout() {
 
             {/* Bottom-right UserInfo component */}
             <UserInfo />
+            
+            {/* Right Panel with Team Members */}
+            <Box className="members" bg="gray.700">
+                {activeTeamId && (
+                    <Box className="membersWrapper">
+                        <TeamMembers teamId={activeTeamId} />
+                    </Box>
+                )}
+            </Box>
            
         </div>
     );
