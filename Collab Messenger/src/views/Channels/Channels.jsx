@@ -1,4 +1,5 @@
 import { Box, Text, VStack, Button, Input } from "@chakra-ui/react";
+import "./Channels.css";
 import { useState } from "react";
 
 export default function Channels({
@@ -54,8 +55,9 @@ export default function Channels({
                 cursor="pointer"
                 mb={4}
             >
-                <Text className="emoji" fontSize="3xl" color="white">👤</Text>
-                <Text className="plusSign" fontSize="1.5rem">+</Text>
+                <Text className="emoji" fontSize="2xl" color="white">👤</Text>
+                <Text className="plusSign" fontSize="1.25rem">+</Text>
+                <Text className="inviteText">Invite User</Text> {/* Tooltip Text */}
             </Box>
 
             {/* Invite User Input Overlay */}

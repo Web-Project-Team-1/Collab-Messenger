@@ -16,16 +16,6 @@
     margin-top: 50px;
 }
 
-/* Channel sidebar container */
-.channelSidebar {
-    display: flex;
-    flex-direction: column;
-    width: 150px;
-    flex-shrink: 0;
-    padding-top: 64px;
-    margin-top: 60px;
-}
-
 /* Chat container */
 .chatContainer {
     flex: 1;
@@ -50,17 +40,14 @@
     gap: 12px;
 }
 
-/* Add border and spacing around each team and channel button */
-.teamButton,
-.channelButton {
+/* Add border and spacing around each team button */
+.teamButton {
     border: 1px solid #4A5568;
-    /* Chakra's gray.600 */
     border-radius: 5px;
 }
 
-/* Highlight selected team and channel */
-.sidebar .teamButton[data-active="true"],
-.channelSidebar .channelButton[data-active="true"] {
+/* Highlight selected team */
+.sidebar .teamButton[data-active="true"] {
     background-color: teal;
     color: white;
 }
@@ -68,49 +55,3 @@
 .createTeamOverlay {
     width: 250px;
 }
-
-/* Style the invite user emoji container */
-.inviteUserIconContainer {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    color: white;
-    margin-bottom: 1rem;
-}
-
-/* Style the emoji to make it white for the dark theme */
-.inviteUserIconContainer .emoji {
-    margin-top: 20px;
-    margin-left: 30px;
-    font-size: 2rem;
-    transition: color 0.3s ease-in-out;
-    /* Smooth color transition */
-}
-
-/* Style the "+" sign over the emoji */
-.inviteUserIconContainer .plusSign {
-    position: absolute;
-    top: 10px;
-    right: 30px;
-    font-size: 1.5rem;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Slight background for better visibility */
-    border-radius: 50%;
-    padding: 2px 5px;
-    border: none;
-}
-
-.createInviteOverlay {
-    width: 250px;
-    position: absolute;
-    top: 150px;
-    left: 300px;
-    padding: 16px;
-    background-color: #2d2d2d;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-    border: 1px solid #1A202C;
-}
-
