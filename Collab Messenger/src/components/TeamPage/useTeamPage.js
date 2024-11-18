@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ref, push, onValue, off } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { AppContext } from '../../store/app.context';
-import { createTeam, inviteUserToTeam, createChannel } from '../../services/teams.service';
+import { createTeam, inviteUserToTeam, createChannel, fetchTeamMembers } from '../../services/teams.service';
 
 export default function useTeamPage() {
     const { user } = useContext(AppContext);
@@ -14,6 +14,18 @@ export default function useTeamPage() {
     const [activeChannelId, setActiveChannelId] = useState(null);
     const [isCreatingTeam, setIsCreatingTeam] = useState(false);
     const navigate = useNavigate();
+    const [teamMembers, setTeamMembers] = useState([]);
+    // const [activeTeamId, setActiveTeamId] = useState(null);
+
+    useEffect(() => {
+        if (activeTeamId) {
+            fetchTeamMembers(activeTeamId).then(members => {
+                setTeamMembers(members);
+            }).catch((error) => {
+                console.error("Error fetching team members:", error);
+            });
+        }
+    }, [activeTeamId]);
 
     useEffect(() => {
         if (!user) {
@@ -91,6 +103,7 @@ export default function useTeamPage() {
 
     return {
         teams,
+        teamMembers,
         newTeamName,
         setNewTeamName,
         inviteUsername,
