@@ -1,17 +1,18 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppContext } from './store/app.context';
 import Register from './views/Register/Register';
 import Login from './views/Login/Login';
 import { useState, useEffect } from 'react';
 import { auth } from './config/firebase.config';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { getUserData } from './services/users.service';
 import Home from './views/Home/Home';
 import Header from './components/Header/Header';
 import TeamPageLayout from './views/TeamPage/TeamPageLayout';
 import Profile from "./views/Profile/Profile";
+import { Spinner, Center } from "@chakra-ui/react";
 
+// Disable warnings in development
 if (process.env.NODE_ENV === "development") {
   const originalWarn = console.warn;
   console.warn = (msg) => {
@@ -29,30 +30,45 @@ function App() {
   const [appState, setAppState] = useState({
     user: null,
     userData: null,
+    loading: true,
   });
 
-  const [user, loading, error] = useAuthState(auth);
-
   useEffect(() => {
-    if (appState.user !== user) {
-      setAppState((prevState) => ({ ...prevState, user }));
-    }
-  }, [user, appState.user]);
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        const userData = await getUserData(firebaseUser.uid);
+        setAppState({
+          user: firebaseUser,
+          userData: userData || null,
+          loading: false,
+        });
+      } else {
+        setAppState({
+          user: null,
+          userData: null,
+          loading: false,
+        });
+      }
+    });
 
-  useEffect(() => {
-    if (user && !appState.userData) {
-      getUserData(user.uid)
-        .then((data) => {
-          if (data) {
-            setAppState((prevState) => ({
-              ...prevState,
-              userData: data,
-            }));
-          }
-        })
-        .catch(console.error);
+    return () => unsubscribe();
+  }, []);
+
+  const AuthenticatedRoute = ({ children }) => {
+    if (appState.loading) {
+      return (
+        <Center height="100vh">
+          <Spinner size="xl" color="teal.500" />
+        </Center>
+      );
     }
-  }, [user, appState.userData]);
+
+    if (!appState.user) {
+      return <Navigate to="/login" replace />;
+    }
+
+    return children;
+  };
 
   return (
     <AppContext.Provider value={{ ...appState, setAppState }}>
@@ -62,8 +78,23 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/teams" element={<TeamPageLayout />} />
-          <Route path="/profile" element={<Profile />} />
+
+          <Route
+            path="/teams"
+            element={
+              <AuthenticatedRoute>
+                <TeamPageLayout />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <AuthenticatedRoute>
+                <Profile />
+              </AuthenticatedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>
