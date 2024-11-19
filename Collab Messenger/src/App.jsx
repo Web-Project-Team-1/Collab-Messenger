@@ -11,6 +11,7 @@ import Header from './components/Header/Header';
 import TeamPageLayout from './views/TeamPage/TeamPageLayout';
 import Profile from "./views/Profile/Profile";
 import { Spinner, Center } from "@chakra-ui/react";
+import PersonalChats from './views/PersonalChats/PersonalChats';
 
 // Disable warnings in development
 if (process.env.NODE_ENV === "development") {
@@ -92,6 +93,14 @@ function App() {
             element={
               <AuthenticatedRoute>
                 <Profile />
+              </AuthenticatedRoute>
+            }
+          />
+           <Route
+            path="/personal-chats"
+            element={
+              <AuthenticatedRoute>
+                <PersonalChats />
               </AuthenticatedRoute>
             }
           />

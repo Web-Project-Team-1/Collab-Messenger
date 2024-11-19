@@ -2,18 +2,27 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Header.css';
 import logo from '../../resources/Connecto.png';
+import { Button } from '@chakra-ui/react';
 
 function Header() {
     return (
         <header>
             <nav>
-                <ul>
+                <ul className="nav-links">
                     <li>
                         <NavLink
                             to="/"
                             className={({ isActive }) => (isActive ? 'active-link' : '')}
                         >
                             <img src={logo} alt="Connecto Logo" className="logo" />
+                        </NavLink>
+                    </li>
+                    <li className="personal-chats">
+                        <NavLink
+                            to="/personal-chats"
+                            className={({ isActive }) => (isActive ? 'active-link' : '')}
+                        >
+                            <Button>Personal Chats</Button>
                         </NavLink>
                     </li>
                 </ul>
