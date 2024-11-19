@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ref, get } from 'firebase/database';
+import { ref, get, onValue } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { getUserData } from '../../services/users.service';
-import { Box, Text, Button } from '@chakra-ui/react';
+import { Box, Text, Button, Input } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import './TeamMembers.css';
 
@@ -11,6 +11,7 @@ export default function TeamMembers({ teamId }) {
     const [selectedMember, setSelectedMember] = useState(null);
     const [showMemberOverlay, setShowMemberOverlay] = useState(false);
     const [overlayPosition, setOverlayPosition] = useState({ top: 0, left: 0 });
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -60,12 +61,29 @@ export default function TeamMembers({ teamId }) {
         setSelectedMember(null);
     };
 
+    const filteredMembers = teamMembers.filter((member) =>
+        member.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="team-members-container">
             <Box className="membersContainer">
                 <Text className="team-members-text">Team Members:</Text>
-                {teamMembers.length > 0 ? (
-                    teamMembers.map((member, idx) => (
+
+                {/* Search Input */}
+                <Input
+                    placeholder="Search by username"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    bg="gray.700"
+                    color="white"
+                    _placeholder={{ color: 'gray.400' }}
+                    mb={4}
+                    size="sm"
+                />
+
+                {filteredMembers.length > 0 ? (
+                    filteredMembers.map((member, idx) => (
                         <Text
                             key={idx}
                             className="teamMember"
@@ -80,6 +98,7 @@ export default function TeamMembers({ teamId }) {
                 )}
             </Box>
 
+            {/* Member Details Overlay */}
             {showMemberOverlay && selectedMember && (
                 <Box
                     className="memberDetailsOverlay"
