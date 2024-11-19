@@ -1,5 +1,6 @@
 import { get, set, ref, query, equalTo, orderByChild, update } from 'firebase/database';
-import { db} from '../config/firebase.config';
+import { db, storage } from '../config/firebase.config';
+import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
 
 export const getUserByUsername = async (username) => {
     const snapshot = await get(ref(db, `users/${username}`));
@@ -37,4 +38,16 @@ export const getUserData = async (uid) => {
     }
     
     return null;
+};
+
+export async function uploadProfilePicture(file, uid, username) {
+    const storagePathRef = storageRef(storage, `profilePictures/${uid}`);
+
+    await uploadBytes(storagePathRef, file);
+    const downloadURL = await getDownloadURL(storagePathRef);
+
+    const userRef = ref(db, `users/${username}`);
+    await update(userRef, { photoURL: downloadURL });
+
+    return downloadURL;
 };

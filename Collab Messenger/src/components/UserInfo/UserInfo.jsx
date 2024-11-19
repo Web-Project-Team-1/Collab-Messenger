@@ -27,15 +27,14 @@ export default function UserInfo() {
         >
             <HStack spacing={3}>
                 <Text color="white" fontSize="sm" fontWeight="bold">
-                    {userData?.username || "Loading..."}
+                    {userData.username || "Loading..."}
                 </Text>
                 <IconButton
                     aria-label="Settings"
                     icon={<FaCog />}
                     size="sm"
-                    variant="ghost"
-                    color="white"
-                    _hover={{ color: "gray.300" }}
+                    variant="outline"
+                    _hover={{ color: "gray.700" }}
                     onClick={handleSettingsClick}
                 />
             </HStack>
