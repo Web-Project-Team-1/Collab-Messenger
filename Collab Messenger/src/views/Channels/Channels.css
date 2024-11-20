@@ -18,7 +18,6 @@
 /* Add border and spacing around each channel button */
 .channelButton {
     border: 1px solid #4A5568;
-    /* Chakra's gray.600 */
     border-radius: 5px;
 }
 
@@ -28,7 +27,7 @@
     color: white;
 }
 
-/* Container for the invite user emoji and + icon */
+/* Invite User Icon Container */
 .inviteUserIconContainer {
     position: relative;
     display: inline-flex;
@@ -40,13 +39,13 @@
     width: 40px;
     height: 40px;
     transition: transform 0.3s ease-in-out;
+    margin-left: 15px;
 }
 
 /* Emoji Styling */
 .inviteUserIconContainer .emoji {
     font-size: 1.5rem;
     color: white;
-    background-color: rgba(0, 0, 0, 0.3);
     padding: 4px;
     margin: 0;
     border-radius: 50%;
@@ -83,17 +82,14 @@
     transform: scale(1.03);
 }
 
-/* Invite User text (Tooltip effect) */
+/* Invite User Tooltip */
 .inviteUserIconContainer .inviteText {
     display: none;
-    /* Hide the text by default */
     position: absolute;
-    top: 50%;
-    /* Center the text vertically */
-    left: 110%;
-    /* Position text to the right of the icon */
-    transform: translateY(-50%);
-    background-color: #333;
+    top: -30px;
+    left: 200%;
+    transform: translateX(-50%);
+    background-color: #000000;
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
@@ -109,20 +105,60 @@
     opacity: 1;
 }
 
-/* Create channel overlay */
-.createChannelOverlay {
-    width: 250px;
-    position: absolute;
-    top: 150px;
-    left: 300px;
-    padding: 16px;
-    background-color: #2d2d2d;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-    border: 1px solid #4A5568;
+/* Settings Icon Container */
+.settingsIconContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    margin-bottom: 0.5rem;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease-in-out;
 }
 
+/* Hover effect on settings icon */
+.settingsIconContainer .emoji {
+    font-size: 1.5rem;
+    color: white;
+    padding: 4px;
+    margin: 0;
+    border-radius: 50%;
+}
+
+/* Hover effect on settings emoji */
+.settingsIconContainer:hover .emoji {
+    transform: scale(1.05);
+    color: #ffcc00;
+}
+
+/* Settings Text (Tooltip effect) */
+.settingsIconContainer .settingsText {
+    display: none;
+    position: absolute;
+    top: -30px;
+    left: 170%;
+    transform: translateX(-50%);
+    background-color: #000000;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show the settings tooltip when hovered */
+.settingsIconContainer:hover .settingsText {
+    display: block;
+    opacity: 1;
+}
+
+/* Create channel overlay */
+.createChannelOverlay,
 .createInviteOverlay {
     width: 250px;
     position: absolute;
