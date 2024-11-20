@@ -1,25 +1,34 @@
-import { Box, Button, Text, VStack, Input, Image } from "@chakra-ui/react";
-import { useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
+import { Box, Button, Text, VStack, Input, Image, HStack } from "@chakra-ui/react";
 import { AppContext } from "../../store/app.context";
 import { uploadProfilePicture, getUserData } from "../../services/users.service";
 import { update } from "firebase/database";
 import defaultProfilePicture from "../../resources/defaultProfilePicture.png";
 import { db } from "../../config/firebase.config";
 import { ref } from "firebase/database";
+import "./profile.css"; // Import the CSS file
 
 export default function Profile() {
-    const { user, userData } = useContext(AppContext);
+    const { user, userData, setAppState } = useContext(AppContext);
     const fileInputRef = useRef(null);
     const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
-    const [editedUsername, setEditedUsername] = useState("");
-    const [editedEmail, setEditedEmail] = useState("");
-    console.log(user);
-    
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [telephone, setTelephone] = useState("");
+
+    const [isEditingField, setIsEditingField] = useState({
+        firstName: false,
+        lastName: false,
+        telephone: false,
+    });
+
     useEffect(() => {
         if (userData) {
             setProfilePicture(userData.photoURL || defaultProfilePicture);
-            setEditedUsername(userData.username);
-            setEditedEmail(userData.email);
+            setFirstName(userData.firstName || "");
+            setLastName(userData.lastName || "");
+            setTelephone(userData.telephone || "");
         }
     }, [userData]);
 
@@ -29,33 +38,37 @@ export default function Profile() {
             try {
                 const newPictureUrl = await uploadProfilePicture(file, user?.uid, userData.username);
                 setProfilePicture(newPictureUrl);
-               
             } catch (error) {
-                console.error("Error uploading profile picture:", error);  
+                console.error("Error uploading profile picture:", error);
             }
         }
     };
 
-    const handleSaveChanges = async () => {
+    const handleSaveField = async (field) => {
         try {
+            const updatedData = {
+                [field]: field === "firstName" ? firstName :
+                    field === "lastName" ? lastName : telephone,
+            };
+
             const userRef = ref(db, `users/${userData.username}`);
-            await update(userRef, {
-                username: editedUsername,
-                email: editedEmail,
-            });
+            await update(userRef, updatedData);
 
             const updatedUserData = await getUserData(user.uid);
+            setAppState((prev) => ({ ...prev, userData: updatedUserData }));
 
+            setIsEditingField((prev) => ({ ...prev, [field]: false }));
         } catch (error) {
-            console.error("Error updating profile:", error);
+            console.error("Error updating profile field:", error);
         }
     };
 
     return (
-        <Box p={5} bg="gray.700" color="white" borderRadius="md" maxW="400px" m="auto" mt="50px">
-            <VStack spacing={4} align="start">
-                <Text fontSize="2xl" fontWeight="bold">User Profile</Text>
+        <Box p={5} bg="gray.700" color="white" borderRadius="md" maxW="400px" m="auto" mt="50px" textAlign="center">
+            <Text fontSize="2xl" fontWeight="bold" mb={4}>User Profile</Text>
+            <div className="profile-picture-container">
                 <Image
+                    className="profile-picture"
                     boxSize="100px"
                     borderRadius="full"
                     src={profilePicture}
@@ -63,23 +76,83 @@ export default function Profile() {
                     onClick={() => fileInputRef.current.click()}
                     cursor="pointer"
                 />
-                <Input
-                    type="file"
-                    ref={fileInputRef}
-                    display="none"
-                    onChange={handleProfilePictureChange}
-                />
+                <span className="hover-text">Change Profile Picture</span>
+                <span className="plus-sign">+</span>
+            </div>
+            <Input
+                type="file"
+                ref={fileInputRef}
+                display="none"
+                onChange={handleProfilePictureChange}
+            />
+            <VStack spacing={4} align="start">
                 <Text>Username:</Text>
-                <Input
-                    value={editedUsername}
-                    onChange={(e) => setEditedUsername(e.target.value)}
-                />
+                <Text bg="gray.600" p={2} borderRadius="md" width="100%">{userData?.username}</Text>
                 <Text>Email:</Text>
-                <Input
-                    value={editedEmail}
-                    onChange={(e) => setEditedEmail(e.target.value)}
-                />
-                <Button colorScheme="blue" onClick={handleSaveChanges}>Save Changes</Button>
+                <Text bg="gray.600" p={2} borderRadius="md" width="100%">{userData?.email}</Text>
+
+                {/* First Name */}
+                <Text>First Name:</Text>
+                {isEditingField.firstName ? (
+                    <HStack>
+                        <Input
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                        <Button size="sm" colorScheme="blue" onClick={() => handleSaveField("firstName")}>
+                            Save
+                        </Button>
+                    </HStack>
+                ) : (
+                    <HStack justify="space-between" width="100%">
+                        <Text bg="gray.600" p={2} borderRadius="md" width="70%">{firstName || "Not set"}</Text>
+                        <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, firstName: true }))}>
+                            Edit
+                        </Button>
+                    </HStack>
+                )}
+
+                {/* Last Name */}
+                <Text>Last Name:</Text>
+                {isEditingField.lastName ? (
+                    <HStack>
+                        <Input
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                        <Button size="sm" colorScheme="blue" onClick={() => handleSaveField("lastName")}>
+                            Save
+                        </Button>
+                    </HStack>
+                ) : (
+                    <HStack justify="space-between" width="100%">
+                        <Text bg="gray.600" p={2} borderRadius="md" width="70%">{lastName || "Not set"}</Text>
+                        <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, lastName: true }))}>
+                            Edit
+                        </Button>
+                    </HStack>
+                )}
+
+                {/* Telephone */}
+                <Text>Telephone:</Text>
+                {isEditingField.telephone ? (
+                    <HStack>
+                        <Input
+                            value={telephone}
+                            onChange={(e) => setTelephone(e.target.value)}
+                        />
+                        <Button size="sm" colorScheme="blue" onClick={() => handleSaveField("telephone")}>
+                            Save
+                        </Button>
+                    </HStack>
+                ) : (
+                    <HStack justify="space-between" width="100%">
+                        <Text bg="gray.600" p={2} borderRadius="md" width="70%">{telephone || "Not set"}</Text>
+                        <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, telephone: true }))}>
+                            Edit
+                        </Button>
+                    </HStack>
+                )}
             </VStack>
         </Box>
     );

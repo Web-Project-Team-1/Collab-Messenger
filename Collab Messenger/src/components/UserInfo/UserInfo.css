@@ -31,3 +31,52 @@
 .settings-icon:hover {
     color: #ffffff;
 }
+
+/* Settings Container */
+.settings-container {
+    position: relative;
+}
+
+/* Settings Icon */
+.settings-container .emoji {
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: -90px;
+    bottom: 10px;
+}
+
+.settings-container:hover .emoji {
+    animation: spin 1.5s linear infinite;
+}
+
+/* Tooltip Text */
+.settings-container .settings-text {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    left: 20px;
+    bottom: 52px;
+    white-space: nowrap;
+    font-size: 14px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.settings-container:hover .settings-text {
+    opacity: 1;
+}
+
+/* Spin Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -1,9 +1,9 @@
-import { Box, Text, HStack, IconButton } from "@chakra-ui/react";
-import { FaCog } from "react-icons/fa";
+import { Box, Text, HStack, Image } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AppContext } from "../../store/app.context";
 import { useNavigate } from "react-router-dom";
 import "./UserInfo.css";
+import defaultProfilePicture from "../../resources/defaultProfilePicture.png";
 
 export default function UserInfo() {
     const { userData } = useContext(AppContext);
@@ -16,6 +16,8 @@ export default function UserInfo() {
     return (
         <Box
             position="fixed"
+            width="250px"
+            height="100px"
             bottom="30px"
             right="25px"
             p={2}
@@ -26,17 +28,26 @@ export default function UserInfo() {
             boxShadow="lg"
         >
             <HStack spacing={3}>
-                <Text color="white" fontSize="sm" fontWeight="bold">
-                    {userData.username || "Loading..."}
-                </Text>
-                <IconButton
-                    aria-label="Settings"
-                    icon={<FaCog />}
-                    size="sm"
-                    variant="outline"
-                    _hover={{ color: "gray.700" }}
-                    onClick={handleSettingsClick}
+                {/* User's Profile Picture */}
+                <Image
+                    mb="40px"
+                    ml="20px"
+                    boxSize="40px"
+                    borderRadius="full"
+                    src={userData?.photoURL || defaultProfilePicture}
+                    alt="User Profile"
                 />
+                {/* User's Username */}
+                <Text color="white" fontSize="lg" fontWeight="bold" mt="40px" mr="20px" ml="-65px">
+                    {userData?.username || "Loading..."}
+                </Text>
+                {/* Settings Icon */}
+                <HStack spacing={1} className="settings-container" onClick={handleSettingsClick} fontSize="22px">
+                    <Text className="emoji">
+                        ⚙️
+                    </Text>
+                    <Text className="settings-text">User Settings</Text>
+                </HStack>
             </HStack>
         </Box>
     );

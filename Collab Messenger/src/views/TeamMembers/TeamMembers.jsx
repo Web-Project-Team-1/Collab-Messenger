@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ref, get, onValue } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { db } from '../../config/firebase.config';
 import { getUserData } from '../../services/users.service';
-import { Box, Text, Button, Input } from '@chakra-ui/react';
+import defaultProfilePicture from "../../resources/defaultProfilePicture.png";
+import { Box, Text, Button, Input, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import './TeamMembers.css';
 
@@ -26,7 +27,12 @@ export default function TeamMembers({ teamId }) {
                     memberIds.map(async (memberId) => {
                         const userData = await getUserData(memberId);
                         return userData
-                            ? { id: memberId, username: userData.username, email: userData.email }
+                            ? {
+                                id: memberId,
+                                username: userData.username,
+                                email: userData.email,
+                                phone: userData.phone || userData.telephone
+                            }
                             : { id: memberId, username: memberId };
                     })
                 );
@@ -40,7 +46,12 @@ export default function TeamMembers({ teamId }) {
     const handleMemberClick = async (memberId, event) => {
         const userData = await getUserData(memberId);
         if (userData) {
-            setSelectedMember({ id: memberId, ...userData });
+            setSelectedMember({
+                id: memberId,
+                ...userData,
+                photoURL: userData.photoURL || defaultProfilePicture,
+                phone: userData.phone || userData.telephone
+            });
             setShowMemberOverlay(true);
 
             const elementRect = event.target.getBoundingClientRect();
@@ -70,7 +81,6 @@ export default function TeamMembers({ teamId }) {
             <Box className="membersContainer">
                 <Text className="team-members-text">Team Members:</Text>
 
-                {/* Search Input */}
                 <Input
                     placeholder="Search by username"
                     value={searchTerm}
@@ -98,7 +108,6 @@ export default function TeamMembers({ teamId }) {
                 )}
             </Box>
 
-            {/* Member Details Overlay */}
             {showMemberOverlay && selectedMember && (
                 <Box
                     className="memberDetailsOverlay"
@@ -107,10 +116,22 @@ export default function TeamMembers({ teamId }) {
                         left: `${overlayPosition.left}px`,
                     }}
                 >
-                    <Text fontSize="lg" fontWeight="bold" color="white" mb={2}>
-                        {selectedMember.username}
-                    </Text>
+                    <Box display="flex" alignItems="center" mb={2}>
+                        <Image
+                            boxSize="50px"
+                            borderRadius="full"
+                            src={selectedMember.photoURL}
+                            alt="User Profile"
+                            mr={3}
+                        />
+                        <Text fontSize="lg" fontWeight="bold" color="white">
+                            {selectedMember.username}
+                        </Text>
+                    </Box>
                     <Text color="white" mb={2}><b>Email:</b> {selectedMember.email || 'Not provided'}</Text>
+                    {selectedMember.firstName && <Text color="white" mb={2}><b>First Name:</b> {selectedMember.firstName}</Text>}
+                    {selectedMember.lastName && <Text color="white" mb={2}><b>Last Name:</b> {selectedMember.lastName}</Text>}
+                    {selectedMember.phone && <Text color="white" mb={2}><b>Phone:</b> {selectedMember.phone}</Text>}
                     <Button colorScheme="teal" width="100%" onClick={handleSendMessage} mb={2}>
                         Send Message
                     </Button>
