@@ -13,7 +13,7 @@
 /* Style for Swiper slides */
 .swiper-slide-content {
     width: 400px;
-    height: 300px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,4 +90,57 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+
+.line-animation-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 60px;
+}
+
+.line-animation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 100px;
+    height: 6.5625rem;
+    position: relative;
+    z-index: 3;
+    white-space: nowrap;
+    animation: scroll 13s linear infinite;
+}
+
+.line-images {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+    margin: 0;
+}
+
+.line-images img {
+    width: 45px;
+    height: auto;
+    margin: 0;
+}
+
+.line_text-animation {
+    font-size: 1.5rem;
+    color: rgb(252, 87, 186);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-size: 2em;
+    font-family: 'Arizonia', cursive;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-80%);
+    }
 }
