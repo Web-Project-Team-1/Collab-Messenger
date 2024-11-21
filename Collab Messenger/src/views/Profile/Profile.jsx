@@ -6,7 +6,7 @@ import { update } from "firebase/database";
 import defaultProfilePicture from "../../resources/defaultProfilePicture.png";
 import { db } from "../../config/firebase.config";
 import { ref } from "firebase/database";
-import "./profile.css"; // Import the CSS file
+import "./profile.css"; 
 
 export default function Profile() {
     const { user, userData, setAppState } = useContext(AppContext);

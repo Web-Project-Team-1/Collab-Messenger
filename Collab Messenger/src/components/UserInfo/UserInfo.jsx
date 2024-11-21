@@ -38,7 +38,7 @@ export default function UserInfo() {
                     alt="User Profile"
                 />
                 {/* User's Username */}
-                <Text color="white" fontSize="lg" fontWeight="bold" mt="40px" mr="20px" ml="-65px">
+                <Text color="white" fontSize="lg" fontWeight="bold" mt="40px" mr="20px" ml="-52px">
                     {userData?.username || "Loading..."}
                 </Text>
                 {/* Settings Icon */}
@@ -49,6 +49,7 @@ export default function UserInfo() {
                     <Text className="settings-text">User Settings</Text>
                 </HStack>
             </HStack>
+                <Text color='white' fontSize="xs" mt={10}>Created on: {userData.createdOn.slice(0, 10)}</Text>
         </Box>
     );
 }

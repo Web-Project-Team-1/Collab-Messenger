@@ -98,7 +98,7 @@ export default function TeamMembers({ teamId }) {
                             key={idx}
                             className="teamMember"
                             onClick={(e) => handleMemberClick(member.id, e)}
-                            style={{ cursor: 'pointer', color: 'white' }}
+                            style={{ cursor: 'pointer' }}
                         >
                             {member.username}
                         </Text>
