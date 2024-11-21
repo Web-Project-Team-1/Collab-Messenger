@@ -25,3 +25,23 @@
     justify-content: center;
     align-items: center;
 }
+
+.login-button {
+    border: 2px solid #303d4b;
+    background-color: transparent;
+    border-radius: 30px;
+}
+
+.login-button:hover {
+    background-color: #303d4b;
+}
+
+.cancel-login-button {
+    border: 2px solid #303d4b;
+    background-color: transparent;
+    border-radius: 30px;
+}
+
+.cancel-login-button:hover {
+    background-color: #303d4b;
+}

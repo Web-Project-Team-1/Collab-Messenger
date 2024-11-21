@@ -30,6 +30,7 @@ export default function Home() {
             </Heading>
             <VStack spacing={4}>
                 <Button
+                    className="sign-up-button-homepage"
                     colorScheme="blue"
                     width="200px"
                     size="lg"
@@ -105,7 +106,7 @@ export default function Home() {
             <div className="line-animation-wrapper">
                 <div className="line-animation">
                     <div className="line-images flex">
-                        <Image src={logo} alt="discord-mark"/>
+                        <Image src={logo} alt="discord-mark" />
                         <div className="line_text-animation">Make video calls</div>
                         <Image src={logo} alt="discord-mark" />
                         <div className="line_text-animation">Chat with friends</div>
@@ -113,10 +114,12 @@ export default function Home() {
                         <div className="line_text-animation">Make audio calls</div>
                         <Image src={logo} alt="discord-mark" />
                         <div className="line_text-animation">Communicate</div>
+                        <Image src={logo} alt="discord-mark" />
+                        <div className="line_text-animation">Use OpenAI</div>
                     </div>
                 </div>
             </div>
-            
+
         </Box>
     );
 }

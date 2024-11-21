@@ -52,7 +52,7 @@ const Login = () => {
                     boxShadow="lg"
                     bg="gray.800"
                     color="white"
-                    mt={-40} // Adjust this to move it closer to the top
+                    mt={-40} 
                 >
                     <Heading as="h2" size="xl" textAlign="center" mb={4}>Login</Heading>
                     <Text textAlign="center" mb={4}>Enter your credentials to log in</Text>
@@ -80,8 +80,8 @@ const Login = () => {
 
                     {/* Buttons */}
                     <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
-                        <Button variant="outline" onClick={() => navigate('/')}>Cancel</Button>
-                        <Button variant="solid" onClick={login}>Login</Button>
+                        <Button className="cancel-login-button" variant="solid" onClick={() => navigate('/')}>Cancel</Button>
+                        <Button className="login-button" variant="solid" onClick={login}>Login</Button>
                     </Stack>
 
                     {/* "Don't have an account?" link below the buttons */}

@@ -1,12 +1,12 @@
-import { Box, Text, VStack, Button, Input, Spinner } from "@chakra-ui/react";
+import { Box, Text, VStack, Button, Input } from "@chakra-ui/react";
 import Chat from "../Chat/Chat";
 import useTeamPage from "../../components/TeamPage/useTeamPage";
 import UserInfo from "../../components/UserInfo/UserInfo";
-import { act, useState } from "react";
-import { useEffect } from "react";
 import Channels from "../Channels/Channels";
 import "./TeamPageLayout.css";
 import TeamMembers from "../TeamMembers/TeamMembers";
+import { FaPlus, FaTimes } from 'react-icons/fa'; 
+import { useState } from "react";
 
 export default function TeamPageLayout() {
     const {
@@ -24,7 +24,6 @@ export default function TeamPageLayout() {
         handleInviteUser,
         handleCreateChannel,
     } = useTeamPage();
-
 
     const [newChannelName, setNewChannelName] = useState("");
     const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);
@@ -52,6 +51,7 @@ export default function TeamPageLayout() {
             setActiveChannelId(null); 
         }
     };
+
     return (
         <div className="teamPageContainer">
             {/* Teams Sidebar */}
@@ -63,14 +63,19 @@ export default function TeamPageLayout() {
                     {teams.map((team) => (
                         <Button
                             key={team.id}
-                            variant="outline"
+                            variant="solid"
                             colorScheme="teal"
                             onClick={() => setActiveTeamIdWithDefaultChannel(team.id)}
                             width="100%"
                             border="1px solid"
                             borderColor={team.id === activeTeamId ? "blue.500" : "gray.600"}
                             bg={team.id === activeTeamId ? "gray.700" : "gray.800"}
-                            _hover={{ bg: "gray.600" }}
+                            _hover={{ bg: "blue.600", transform: "scale(1.05)" }} 
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }} 
+                            _active={{ bg: "blue.600" }} 
+                            transition="all 0.3s ease-in-out" 
+                            leftIcon={<FaPlus />} 
+                            borderRadius="30px" 
                         >
                             {team.name}
                         </Button>
@@ -84,6 +89,12 @@ export default function TeamPageLayout() {
                     variant="solid"
                     colorScheme="blue"
                     mt={4}
+                    leftIcon={<FaPlus />}
+                    _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+                    _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                    _active={{ bg: "blue.800" }}
+                    transition="all 0.3s ease-in-out"
+                    borderRadius="30px" 
                 >
                     Create Team
                 </Button>
@@ -112,7 +123,8 @@ export default function TeamPageLayout() {
                             mb={2}
                             bg="gray.700"
                             color="white"
-                            _placeholder={{ color: "gray.400" }}
+                            _placeholder={{ color: "blue.400" }}
+                            borderRadius="30px" 
                         />
                         <Button
                             onClick={handleCreateTeamSubmit}
@@ -121,14 +133,23 @@ export default function TeamPageLayout() {
                             colorScheme="blue"
                             mb={2}
                             isLoading={isCreatingTeam}
+                            _hover={{ bg: "blue.600" }}
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                            _active={{ bg: "blue.800" }}
+                            borderRadius="30px" 
                         >
                             Create
                         </Button>
                         <Button
                             onClick={handleCreateTeamCancel}
                             width="100%"
-                            variant="outline"
-                            colorScheme="gray"
+                            variant="solid"
+                            colorScheme="blue"
+                            leftIcon={<FaTimes />} 
+                            _hover={{ bg: "blue.600" }}
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                            _active={{ bg: "blue.700" }}
+                            borderRadius="30px" 
                         >
                             Cancel
                         </Button>
@@ -168,7 +189,7 @@ export default function TeamPageLayout() {
 
             {/* Bottom-right UserInfo component */}
             <UserInfo />
-            
+
             {/* Right Panel with Team Members */}
             <Box className="members" bg="gray.700">
                 {activeTeamId && (
@@ -177,7 +198,6 @@ export default function TeamPageLayout() {
                     </Box>
                 )}
             </Box>
-           
         </div>
     );
 }

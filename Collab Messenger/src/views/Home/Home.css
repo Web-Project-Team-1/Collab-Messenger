@@ -6,11 +6,9 @@
     max-width: 600px;
     position: relative;
     margin: 0 auto;
-    /* Ensures it's horizontally centered */
     padding: 20px;
 }
 
-/* Style for Swiper slides */
 .swiper-slide-content {
     width: 400px;
     height: 200px;
@@ -22,41 +20,42 @@
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
-    /* Prevents padding from affecting size */
 }
 
-/* Darker colors for each feature box */
 .feature-1 {
     background-color: #303d4b;
-    /* Darker blue */
     color: #ffffff;
 }
 
 .feature-2 {
     background-color: #3a4646;
-    /* Darker teal */
     color: #ffffff;
 }
 
 .feature-3 {
     background-color: #4e3d68;
-    /* Darker purple */
     color: #ffffff;
 }
 
 .feature-4 {
     background-color: #39553e;
-    /* Darker green */
     color: #ffffff;
 }
 
 .feature-5 {
     background-color: #4b110a;
-    /* Darker green */
     color: #ffffff;
 }
 
-/* Style for navigation buttons */
+.sign-up-button-homepage {
+    border-radius: 30px;
+    border: 2px solid #303d4b;
+}
+
+.sign-up-button-homepage:hover {
+    background-color: #303d4b;
+}
+
 .swiper-button {
     position: absolute;
     top: 50%;
@@ -82,10 +81,9 @@
 
 .prev-button:hover,
 .next-button:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgb(84, 84, 204);
 }
 
-/* Make sure the container and slides are aligned */
 .swiper-slide {
     display: flex;
     align-items: center;

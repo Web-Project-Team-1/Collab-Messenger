@@ -1,4 +1,4 @@
-import { Button, Input, Stack, Box, Heading, Text } from "@chakra-ui/react";
+import { Button, Input, Stack, Box, Heading, Text, Flex, Center } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import {
   PasswordInput,
@@ -127,9 +127,9 @@ const Register = () => {
           {/* Buttons */}
           <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
             {/* Cancel Button */}
-            <Button variant="outline" onClick={() => navigate('/')}>Cancel</Button>
+            <Button className="cancel-register-button" variant="solid" onClick={() => navigate('/')}>Cancel</Button>
             {/* Register Button */}
-            <Button variant="solid" onClick={register}>Register</Button>
+            <Button className="register-button" variant="solid" onClick={register}>Register</Button>
           </Stack>
 
           {/* "Already have an account?" link below the buttons */}
