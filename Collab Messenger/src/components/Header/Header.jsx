@@ -17,14 +17,6 @@ function Header() {
                             <img src={logo} alt="Connecto Logo" className="logo" />
                         </NavLink>
                     </li>
-                    <li className="personal-chats">
-                        <NavLink
-                            to="/personal-chats"
-                            className={({ isActive }) => (isActive ? 'active-link' : '')}
-                        >
-                            <Button>Personal Chats</Button>
-                        </NavLink>
-                    </li>
                 </ul>
             </nav>
         </header>

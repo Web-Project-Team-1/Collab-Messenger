@@ -5,8 +5,10 @@ import UserInfo from "../../components/UserInfo/UserInfo";
 import Channels from "../Channels/Channels";
 import "./TeamPageLayout.css";
 import TeamMembers from "../TeamMembers/TeamMembers";
-import { FaPlus, FaTimes } from 'react-icons/fa'; 
+import { FaPlus, FaTimes } from 'react-icons/fa';
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import dms from "../../resources/dms.png";
 
 export default function TeamPageLayout() {
     const {
@@ -48,7 +50,7 @@ export default function TeamPageLayout() {
             );
             setActiveChannelId(generalChannel ? generalChannel.id : selectedTeam.channels[0].id);
         } else {
-            setActiveChannelId(null); 
+            setActiveChannelId(null);
         }
     };
 
@@ -56,6 +58,18 @@ export default function TeamPageLayout() {
         <div className="teamPageContainer">
             {/* Teams Sidebar */}
             <Box className="sidebar" p={4} bg="gray.900" borderRight="1px solid gray.700">
+                {/* DMS Section */}
+                <NavLink
+                    to="/personal-chats"
+                    className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                    <Box display="flex" alignItems="center" mt={20} p={2} borderRadius="md" className="direct-messages-container">
+                        <img src={dms} alt="Direct Messages" style={{ width: "40px", marginLeft: "25px" }} />
+                        <Text className="direct-messages-icon">Direct Messages</Text>
+                    </Box>
+                </NavLink>
+
+                {/* Teams Section */}
                 <Text fontSize="2xl" mb={4} color="white">
                     Teams
                 </Text>
@@ -70,12 +84,12 @@ export default function TeamPageLayout() {
                             border="1px solid"
                             borderColor={team.id === activeTeamId ? "blue.500" : "gray.600"}
                             bg={team.id === activeTeamId ? "gray.700" : "gray.800"}
-                            _hover={{ bg: "blue.600", transform: "scale(1.05)" }} 
-                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }} 
-                            _active={{ bg: "blue.600" }} 
-                            transition="all 0.3s ease-in-out" 
-                            leftIcon={<FaPlus />} 
-                            borderRadius="30px" 
+                            _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                            _active={{ bg: "blue.600" }}
+                            transition="all 0.3s ease-in-out"
+                            leftIcon={<FaPlus />}
+                            borderRadius="30px"
                         >
                             {team.name}
                         </Button>
@@ -94,7 +108,7 @@ export default function TeamPageLayout() {
                     _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
                     _active={{ bg: "blue.800" }}
                     transition="all 0.3s ease-in-out"
-                    borderRadius="30px" 
+                    borderRadius="30px"
                 >
                     Create Team
                 </Button>
@@ -124,7 +138,7 @@ export default function TeamPageLayout() {
                             bg="gray.700"
                             color="white"
                             _placeholder={{ color: "blue.400" }}
-                            borderRadius="30px" 
+                            borderRadius="30px"
                         />
                         <Button
                             onClick={handleCreateTeamSubmit}
@@ -136,7 +150,7 @@ export default function TeamPageLayout() {
                             _hover={{ bg: "blue.600" }}
                             _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
                             _active={{ bg: "blue.800" }}
-                            borderRadius="30px" 
+                            borderRadius="30px"
                         >
                             Create
                         </Button>
@@ -145,11 +159,11 @@ export default function TeamPageLayout() {
                             width="100%"
                             variant="solid"
                             colorScheme="blue"
-                            leftIcon={<FaTimes />} 
+                            leftIcon={<FaTimes />}
                             _hover={{ bg: "blue.600" }}
                             _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
                             _active={{ bg: "blue.700" }}
-                            borderRadius="30px" 
+                            borderRadius="30px"
                         >
                             Cancel
                         </Button>

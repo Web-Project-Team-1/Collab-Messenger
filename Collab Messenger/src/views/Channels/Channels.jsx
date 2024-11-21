@@ -22,7 +22,7 @@ export default function Channels({
     const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     const activeTeam = teams.find((team) => team.id === activeTeamId);
-    const activeTeamName = activeTeam?.name || "Select a Team";
+    const activeTeamName = activeTeam?.name;
 
     const handleCreateChannelClick = () => setShowCreateChannelInput(true);
     const handleCreateChannelCancel = () => {
