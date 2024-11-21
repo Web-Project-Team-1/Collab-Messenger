@@ -1,5 +1,9 @@
 import { Button, Input, Stack, Box, Heading, Text } from "@chakra-ui/react";
 import { useState, useContext } from "react";
+import {
+  PasswordInput,
+  PasswordStrengthMeter,
+} from "../../components/ui/password-input";
 import { AppContext } from "../../store/app.context";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/auth.service";
@@ -12,7 +16,6 @@ const Register = () => {
     email: '',
     password: ''
   });
-
   const { setAppState } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -34,7 +37,9 @@ const Register = () => {
         user: credential.user,
         userData: null
       });
-      navigate('/');
+
+      // Redirect to the login page after successful registration
+      navigate('/login');
     } catch (error) {
       console.error('Register failed', error);
       alert('Registration failed: ' + error.message);
@@ -52,44 +57,92 @@ const Register = () => {
     <div className="register-page">
       <div className="home-background"></div>
       <div className="content-container">
-        <Box maxW="sm" w="full" p={6} borderRadius="md" boxShadow="lg" bg="gray.800" color="white">
+        <Box
+          maxW="sm"
+          w="full"
+          p={6}
+          borderRadius="md"
+          boxShadow="lg"
+          bg="gray.800"
+          color="white"
+          mt={-20} // Adjust this to move it closer to the top
+        >
           <Heading as="h2" size="xl" textAlign="center" mb={4}>Register</Heading>
           <Text textAlign="center" mb={4}>Fill in the form below to create an account</Text>
           <Stack gap="4" w="full">
-            <Input
-              placeholder="Username"
-              value={user.username}
-              onChange={updateUser('username')}
-              bg="gray.700"
-              _hover={{ bg: "gray.600" }}
-              _focus={{ bg: "gray.600" }}
-              color="white"
-            />
-            <Input
-              type="email"
-              placeholder="Email"
-              value={user.email}
-              onChange={updateUser('email')}
-              bg="gray.700"
-              _hover={{ bg: "gray.600" }}
-              _focus={{ bg: "gray.600" }}
-              color="white"
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={user.password}
-              onChange={updateUser('password')}
-              bg="gray.700"
-              _hover={{ bg: "gray.600" }}
-              _focus={{ bg: "gray.600" }}
-              color="white"
-            />
+            {/* Username Field */}
+            <Stack>
+              <label htmlFor="username" className="form-label">
+                Username <span className="required">*</span>
+              </label>
+              <Input
+                id="username"
+                placeholder="Username"
+                value={user.username}
+                onChange={updateUser('username')}
+                bg="gray.700"
+                _hover={{ bg: "gray.600" }}
+                _focus={{ bg: "gray.600" }}
+                color="white"
+              />
+            </Stack>
+
+            {/* Email Field */}
+            <Stack>
+              <label htmlFor="email" className="form-label">
+                Email <span className="required">*</span>
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Email"
+                value={user.email}
+                onChange={updateUser('email')}
+                bg="gray.700"
+                _hover={{ bg: "gray.600" }}
+                _focus={{ bg: "gray.600" }}
+                color="white"
+              />
+            </Stack>
+
+            {/* Password Field with Password Strength Meter */}
+            <Stack>
+              <label htmlFor="password" className="form-label">
+                Password <span className="required">*</span>
+              </label>
+              <PasswordInput
+                id="password"
+                placeholder="Password"
+                value={user.password}
+                onChange={updateUser('password')}
+                bg="gray.700"
+                _hover={{ bg: "gray.600" }}
+                _focus={{ bg: "gray.600" }}
+                color="white"
+              />
+              <PasswordStrengthMeter value={2} /> {/* Adjust `value` based on logic */}
+            </Stack>
           </Stack>
+
+          {/* Buttons */}
           <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
+            {/* Cancel Button */}
             <Button variant="outline" onClick={() => navigate('/')}>Cancel</Button>
+            {/* Register Button */}
             <Button variant="solid" onClick={register}>Register</Button>
           </Stack>
+
+          {/* "Already have an account?" link below the buttons */}
+          <Text textAlign="center" mt={4}>
+            Already have an account?{" "}
+            <Button
+              variant="link"
+              color="blue.500"
+              onClick={() => navigate('/login')}
+            >
+              Login
+            </Button>
+          </Text>
         </Box>
       </div>
     </div>

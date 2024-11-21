@@ -44,7 +44,16 @@ const Login = () => {
         <div className="login-page">
             <div className="home-background"></div>
             <div className="content-container">
-                <Box maxW="sm" w="full" p={6} borderRadius="md" boxShadow="lg" bg="gray.800" color="white">
+                <Box
+                    maxW="sm"
+                    w="full"
+                    p={6}
+                    borderRadius="md"
+                    boxShadow="lg"
+                    bg="gray.800"
+                    color="white"
+                    mt={-40} // Adjust this to move it closer to the top
+                >
                     <Heading as="h2" size="xl" textAlign="center" mb={4}>Login</Heading>
                     <Text textAlign="center" mb={4}>Enter your credentials to log in</Text>
                     <Stack gap="4" w="full">
@@ -68,10 +77,24 @@ const Login = () => {
                             color="white"
                         />
                     </Stack>
+
+                    {/* Buttons */}
                     <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
                         <Button variant="outline" onClick={() => navigate('/')}>Cancel</Button>
                         <Button variant="solid" onClick={login}>Login</Button>
                     </Stack>
+
+                    {/* "Don't have an account?" link below the buttons */}
+                    <Text textAlign="center" mt={4}>
+                        Don't have an account?{" "}
+                        <Button
+                            variant="link"
+                            color="blue.500"
+                            onClick={() => navigate('/register')}
+                        >
+                            Register
+                        </Button>
+                    </Text>
                 </Box>
             </div>
         </div>

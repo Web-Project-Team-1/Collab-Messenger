@@ -6,6 +6,7 @@ import Login from './views/Login/Login';
 import { useState, useEffect } from 'react';
 import { auth } from './config/firebase.config';
 import { getUserData } from './services/users.service';
+import Signup from './views/Signup/Signup';
 import Home from './views/Home/Home';
 import Header from './components/Header/Header';
 import TeamPageLayout from './views/TeamPage/TeamPageLayout';
@@ -77,6 +78,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
@@ -96,7 +98,7 @@ function App() {
               </AuthenticatedRoute>
             }
           />
-           <Route
+          <Route
             path="/personal-chats"
             element={
               <AuthenticatedRoute>
