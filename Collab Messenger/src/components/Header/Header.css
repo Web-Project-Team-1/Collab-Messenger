@@ -1,5 +1,4 @@
 header {
-    background-color: #0000007e;
     color: white;
     padding: 10px 20px;
     position: fixed;
@@ -9,6 +8,12 @@ header {
     z-index: 1000;
     display: flex;
     align-items: center;
+    background-color: black;
+    /* or any color you need */
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
 }
 
 header nav ul {

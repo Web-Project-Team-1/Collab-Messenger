@@ -10,7 +10,7 @@ export default function Chat({ teamId, channelId }) {
             {/* Scrollable chat messages */}
             <Box className="messageContainer" bg="gray.800">
                 {messages.map((msg, idx) => (
-                    <Box key={idx} p={1} mb={1} bg="transparent" border="none" borderRadius="none">
+                    <Box key={idx} mb={1} bg="transparent" border="none" borderRadius="none">
                         <Text fontWeight="bold" color="white">{msg.username}:</Text>
                         <Text color="white">{msg.text}</Text>
                     </Box>

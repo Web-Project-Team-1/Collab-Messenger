@@ -4,8 +4,7 @@
     flex-direction: column;
     width: 150px;
     flex-shrink: 0;
-    padding-top: 64px;
-    margin-top: 55px;
+    padding-top: 20px;
 }
 
 /* Button container inside the channel sidebar */
