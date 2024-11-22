@@ -4,9 +4,9 @@ import { db } from "../../config/firebase.config";
 import { getUserData } from "../../services/users.service";
 import defaultProfilePicture from "../../resources/defaultProfilePicture.png";
 import { Box, Text, Button, Input, Image } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import Calendar from "react-calendar";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import calendarIcon from "../../resources/calendar.png";
 import "./TeamMembers.css";
 
 export default function TeamMembers({ teamId }) {
@@ -16,7 +16,6 @@ export default function TeamMembers({ teamId }) {
     const [showAllMembers, setShowAllMembers] = useState(false);
     const [overlayPosition, setOverlayPosition] = useState({ top: 0, left: 0 });
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentDate, setCurrentDate] = useState(new Date());
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -45,7 +44,6 @@ export default function TeamMembers({ teamId }) {
         };
 
         fetchTeamMembers();
-        setCurrentDate(new Date());
     }, [teamId]);
 
     const handleMemberClick = async (memberId, event) => {
@@ -61,7 +59,7 @@ export default function TeamMembers({ teamId }) {
 
             const elementRect = event.target.getBoundingClientRect();
             setOverlayPosition({
-                top: elementRect.top + window.scrollY - 50, // Shift overlay above the member item
+                top: elementRect.top + window.scrollY - 50,
                 left: elementRect.left + window.scrollX - 20,
             });
         }
@@ -87,6 +85,10 @@ export default function TeamMembers({ teamId }) {
 
     const handleCloseAllMembers = () => {
         setShowAllMembers(false);
+    };
+
+    const openCalendar = () => {
+        navigate("/calendar");
     };
 
     return (
@@ -260,12 +262,27 @@ export default function TeamMembers({ teamId }) {
                         </Button>
                     </Box>
                 )}
-
-                <Calendar
-                    value={currentDate}
-                    className="react-calendar"
-                    tileClassName="custom-calendar-tile"
-                />
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    mt={20}
+                    p={2}
+                    borderRadius="md"
+                    className="calendar-icon-container"
+                    position="relative"
+                >
+                    <NavLink
+                        to="/calendar"
+                        className={({ isActive }) => (isActive ? "active-link" : "")}
+                    >
+                        <img
+                            src={calendarIcon}
+                            alt="Calendar icon"
+                            className="calendar-icon"
+                        />
+                    </NavLink>
+                    <Text className="calendar-tooltip">Calendar</Text>
+                </Box>
             </div>
         </div>
     );

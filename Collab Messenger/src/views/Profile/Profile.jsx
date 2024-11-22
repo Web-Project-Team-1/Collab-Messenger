@@ -64,7 +64,7 @@ export default function Profile() {
     };
 
     return (
-        <Box p={5} bg="gray.700" color="white" borderRadius="md" maxW="400px" m="auto" mt="50px" textAlign="center">
+        <Box p={5} bg="gray.700" color="white" borderRadius="md" maxW="400px" m="auto" textAlign="center" mt={180}>
             <Text fontSize="2xl" fontWeight="bold" mb={4}>User Profile</Text>
             <div className="profile-picture-container">
                 <Image

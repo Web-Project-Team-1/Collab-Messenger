@@ -6,7 +6,7 @@ import Channels from "../Channels/Channels";
 import "./TeamPageLayout.css";
 import TeamMembers from "../TeamMembers/TeamMembers";
 import { FaPlus, FaTimes } from 'react-icons/fa';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import dms from "../../resources/dms.png";
 
@@ -27,6 +27,25 @@ export default function TeamPageLayout() {
         handleCreateChannel,
     } = useTeamPage();
 
+       const setActiveTeamIdWithDefaultChannel = (teamId) => {
+        setActiveTeamId(teamId);
+        const selectedTeam = teams.find((team) => team.id === teamId);
+        if (selectedTeam && selectedTeam.channels.length > 0) {
+            const generalChannel = selectedTeam.channels.find(
+                (channel) => channel.name.toLowerCase() === "general"
+            );
+            setActiveChannelId(generalChannel ? generalChannel.id : selectedTeam.channels[0].id);
+        } else {
+            setActiveChannelId(null);
+        }
+    };
+
+    useEffect(() => {
+        if (teams.length > 0) {
+            setActiveTeamIdWithDefaultChannel(teams[0].id);
+        }
+    }, [teams]);
+
     const [newChannelName, setNewChannelName] = useState("");
     const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);
     const [showCreateChannelInput, setShowCreateChannelInput] = useState(false);
@@ -40,18 +59,6 @@ export default function TeamPageLayout() {
     const handleCreateTeamSubmit = () => {
         handleCreateTeam();
         setShowCreateTeamInput(false);
-    };
-    const setActiveTeamIdWithDefaultChannel = (teamId) => {
-        setActiveTeamId(teamId);
-        const selectedTeam = teams.find((team) => team.id === teamId);
-        if (selectedTeam && selectedTeam.channels.length > 0) {
-            const generalChannel = selectedTeam.channels.find(
-                (channel) => channel.name.toLowerCase() === "general"
-            );
-            setActiveChannelId(generalChannel ? generalChannel.id : selectedTeam.channels[0].id);
-        } else {
-            setActiveChannelId(null);
-        }
     };
 
     return (
