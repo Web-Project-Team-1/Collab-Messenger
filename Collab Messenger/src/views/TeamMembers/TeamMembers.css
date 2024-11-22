@@ -1,51 +1,132 @@
-/* Members container for team members on the right */
 .team-members-container {
-    margin-top: 10px;
-    padding: 10px;
-    width: 250px;
+    padding: 15px;
+    width: 100%;
+    max-width: 300px;
     border-top: 1px solid #444;
     border-bottom: 1px solid #444;
+    border-radius: 8px;
+}
+
+.membersContainer {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.teamMember {
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: white;
-    transition: color 0.3s ease;
-    border: 2px solid #445;
-    border-radius: 20px;
-    padding: 6px;
-    width: 130px;
-    margin-bottom: 9px;
-    cursor: pointer;
-}
-
-.teamMember:hover {
-    color: #007bff;
-}
-
 .team-members-text {
-    margin-bottom: 10px;
-    margin-top: 8px;
-    color: white;
     font-size: 19px;
+    color: #e2e8f0;
     font-weight: bold;
 }
 
-.membersContainer {
-    width: 200px;
+.teamMember {
+    padding: 8px;
+    border-radius: 20px;
+    background-color: #2d3748;
+    color: #e2e8f0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.teamMember:hover {
+    background-color: #4a5568;
+    color: #63b3ed;
 }
 
 .memberDetailsOverlay {
-    padding: 10px;
+    padding: 16px;
     background-color: #2d3748;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     z-index: 10;
-    width: 220px;
-    border: 1px solid #4299e1;
     position: absolute;
+    color: #e2e8f0;
 }
+
+.memberDetailsOverlay button {
+    margin-top: 10px;
+}
+
+.react-calendar {
+    margin-top: 20px;
+    width: 100%;
+    padding: 8px;
+    max-width: 250px;
+    border-radius: 8px;
+    background-color: #1a202c;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+  
+  .react-calendar__tile {
+    border-radius: 4px;
+    padding: 10px;
+    transition: background-color 0.2s ease-in-out, transform 0.3s ease;
+  }
+  
+  .react-calendar__tile:hover {
+    background-color: #4a5568;
+    transform: scale(1.05);
+  }
+  
+  .react-calendar__tile--now {
+    background-color: #2b6cb0;
+    color: white;
+    border-radius: 50%;
+  }
+  
+  .react-calendar__tile--weekend {
+    background-color: #2d3748;
+    color: #f56565; /* Weekend day color */
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .react-calendar__tile--weekend:hover {
+    background-color: #4a5568;
+  }
+  
+  /* Smaller navigation */
+.react-calendar__navigation {
+    font-size: 0.85rem; /* Decrease font size */
+    padding: 5px; /* Reduce padding for navigation buttons */
+  }
+  
+  .react-calendar__navigation button {
+    font-size: 0.85rem; /* Decrease font size for buttons */
+    padding: 5px 10px; /* Adjust padding of navigation buttons */
+  }
+  
+  /* Highlight weekend days (Saturday and Sunday) */
+  .react-calendar__tile--weekend {
+    background-color: #f56565; /* Light red for weekends */
+    color: white; /* White text for readability */
+  }
+  
+  .react-calendar__tile--weekend:hover {
+    background-color: #c53030; /* Darker red when hovered */
+  }
+  
+  /* Keep the current day look */
+  .react-calendar__tile--now {
+    background-color: #2b6cb0;
+    color: white;
+    border-radius: 50%;
+  }
+  
+  /* Optional: Make the days' tile padding smaller */
+  .react-calendar__tile {
+    padding: 8px; /* Decrease padding for each day tile */
+  }
+  
+  /* Custom Calendar tile */
+  .custom-calendar-tile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 200px; /* Adjust as needed */
+  }
+  

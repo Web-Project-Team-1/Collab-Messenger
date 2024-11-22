@@ -14,7 +14,7 @@ export default function UserInfo() {
     };
 
     return (
-        <Box
+        <Box 
             position="fixed"
             width="250px"
             height="100px"
@@ -27,7 +27,7 @@ export default function UserInfo() {
             alignItems="center"
             boxShadow="lg"
         >
-            <HStack spacing={3}>
+            <HStack spacing={3} >
                 {/* User's Profile Picture */}
                 <Image
                     mb="40px"
