@@ -18,51 +18,82 @@ export default function PersonalChats() {
     } = usePersonalChats(location.state?.receiverId || null);
 
     return (
-        <Flex className="personalChatContainer" bg="gray.700" boxShadow="lg" height="100vh">
-            {/* Sidebar with list of personal chats */}
-            <VStack className="chatSidebar" bg="gray.800" width="250px" p={4} align="start" overflowY="auto">
-                <Text fontWeight="bold" color="white" mb={4}>Personal Chats</Text>
-                {chats.map((chat, idx) => (
-                    <Button
-                        key={idx}
-                        onClick={() => setSelectedReceiverId(chat.receiverId)}
-                        colorScheme="teal"
-                        variant="ghost"
-                        w="full"
-                        textAlign="left"
-                        color="white"
-                    >
-                        {chat.username}
-                    </Button>
-                ))}
+        <Flex h="100vh" bg="gray.700">
+            {/* Sidebar for personal chats */}
+            <VStack
+                bg="gray.800"
+                p={4}
+                spacing={4}
+                boxShadow="lg"
+                overflowY="auto"
+                mt={14}
+                w="12%"
+            >
+                <Text fontWeight="bold" color="white" fontSize="lg" mb={7} mt={4}>
+                    Personal Chats
+                </Text>
+                {chats.length > 0 ? (
+                    chats.map((chat, idx) => (
+                        <Button
+                            variant={'solid'}
+                            key={idx}
+                            onClick={() => setSelectedReceiverId(chat.receiverId)}
+                            colorScheme={selectedReceiverId === chat.receiverId ? 'blue' : 'gray'}
+                            bg={selectedReceiverId === chat.receiverId ? 'blue.600' : 'black'}
+                            color="white"
+                            w="full"
+                            textAlign="left"
+                            _hover={{ bg: selectedReceiverId === chat.receiverId ? 'blue.500' : 'gray.700' }}
+                        >
+                            {chat.username}
+                        </Button>
+                    ))
+                ) : (
+                    <Text color="gray.400">No chats available</Text>
+                )}
             </VStack>
 
             {/* Main chat area */}
-            <VStack flex="1" className="chatMainArea" bg="gray.800" boxShadow="lg" pt="4rem">
+            <VStack w="75%" spacing={0} flex="1" bg="gray.900" p={4} mt={14}>
                 {/* Message container */}
-                <Box className="messageContainer" bg="gray.800" w="full" p={4} overflowY="auto" maxHeight="calc(100vh - 150px)">
-                    {messages.map((msg, idx) => (
-                        <Box key={idx} p={1} mb={1} bg="transparent" border="none" borderRadius="none">
-                            <Text fontWeight="bold" color="white">{msg.username}:</Text>
-                            <Text color="white">{msg.text}</Text>
-                        </Box>
-                    ))}
+                <Box
+                    flex="1"
+                    w="full"
+                    p={4}
+                    bg="gray.800"
+                    borderRadius="md"
+                    overflowY="auto"
+                    maxHeight="calc(100vh - 150px)"
+                >
+                    {messages.length > 0 ? (
+                        messages.map((msg, idx) => (
+                            <Box key={idx} mb={3}>
+                                <Text fontWeight="bold" color="teal.300">
+                                    {msg.username}:
+                                </Text>
+                                <Text color="white">{msg.text}</Text>
+                            </Box>
+                        ))
+                    ) : (
+                        <Text color="gray.400">No messages yet. Start the conversation!</Text>
+                    )}
                 </Box>
 
                 {/* Message input */}
-                <Box className="inputContainer" w="full" p={4} borderTop="1px solid #333">
-                    <HStack w="full">
-                        <Input
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Type a message"
-                            bg="gray.600"
-                            border="none"
-                            _placeholder={{ color: "gray.400" }}
-                        />
-                        <Button colorScheme="blue" onClick={sendMessage}>Send</Button>
-                    </HStack>
-                </Box>
+                <HStack w="full" p={4} spacing={4} bg="gray.800" borderTop="1px solid #333">
+                    <Input
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Type a message"
+                        bg="gray.600"
+                        color="white"
+                        _placeholder={{ color: 'gray.400' }}
+                        flex="1"
+                    />
+                    <Button colorScheme="blue" onClick={sendMessage}>
+                        Send
+                    </Button>
+                </HStack>
             </VStack>
         </Flex>
     );

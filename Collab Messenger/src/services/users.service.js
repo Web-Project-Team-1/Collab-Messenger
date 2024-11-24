@@ -57,9 +57,7 @@ export const getAllUsers = async () => {
     const usersData = snapshot.val();
     
     if (usersData) {
-        // Count the number of users
-        return Object.keys(usersData).length;
+        return Object.keys(usersData);
     }
 
-    return 0; // If no users are found
 };
