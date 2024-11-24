@@ -133,6 +133,36 @@
     font-family: 'Arizonia', cursive;
 }
 
+.allUsersText {
+  font-family: 'Rock Salt', cursive;
+  font-size: 1.3rem;
+  animation: bounce 2s ease-in-out infinite, colorChange 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes colorChange {
+    0% {
+      color: rgb(217, 119, 242);
+    }
+    50% {
+      color: rgb(119, 51, 187);
+    }
+    80% {
+      color: rgb(222, 68, 153);
+    }
+    100% {
+      color: rgb(218, 84, 251);
+    }
+  }
+  
 @keyframes scroll {
     from {
         transform: translateX(100%);

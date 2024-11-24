@@ -1,14 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { Box, Heading, Button, VStack, Text, Image } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { getAllUsers } from "../../services/users.service";
 import "swiper/css";
 import "./Home.css";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "../../resources/logo.png";
 
 export default function Home() {
     const navigate = useNavigate();
     const swiperRef = useRef(null);
+    const [userCount, setUserCount] = useState(0); 
+
+    useEffect(() => {
+        const fetchUserCount = async () => {
+            const count = await getAllUsers();
+            setUserCount(count);
+        };
+
+        fetchUserCount();
+    }, []);
 
     return (
         <Box
@@ -39,6 +50,10 @@ export default function Home() {
                     Signup
                 </Button>
             </VStack>
+
+            <Box mt={8}>
+                <Text className="allUsersText" >Users currently on the platform: {userCount}</Text>
+            </Box>
 
             <Box className="swiper-container" mt={12}>
                 <button

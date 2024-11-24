@@ -51,3 +51,15 @@ export async function uploadProfilePicture(file, uid, username) {
 
     return downloadURL;
 };
+
+export const getAllUsers = async () => {
+    const snapshot = await get(ref(db, 'users'));
+    const usersData = snapshot.val();
+    
+    if (usersData) {
+        // Count the number of users
+        return Object.keys(usersData).length;
+    }
+
+    return 0; // If no users are found
+};

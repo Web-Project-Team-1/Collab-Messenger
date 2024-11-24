@@ -239,6 +239,7 @@ export default function Channels({
                 _active={{ bg: "blue.800" }}
                 transition="all 0.3s ease-in-out"
                 borderRadius="30px"
+                border={"1px solid"}
             >
                 Create Channel
             </Button>
