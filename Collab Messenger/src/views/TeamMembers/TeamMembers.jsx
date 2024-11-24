@@ -95,7 +95,7 @@ export default function TeamMembers({ teamId }) {
         <div className="members">
             <div className="team-members-container">
                 <Box className="membersContainer">
-                    <Text className="team-members-text">Team Members:</Text>
+                    <Text className="team-members-text" textAlign="center">Team Members:</Text>
 
                     <Input
                         placeholder="Search by username"

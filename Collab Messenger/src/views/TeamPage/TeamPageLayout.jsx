@@ -9,6 +9,9 @@ import { FaPlus, FaTimes } from 'react-icons/fa';
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import dms from "../../resources/dms.png";
+import { db } from "../../config/firebase.config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { get, ref, set } from "firebase/database";
 
 export default function TeamPageLayout() {
     const {
@@ -61,6 +64,32 @@ export default function TeamPageLayout() {
         setShowCreateTeamInput(false);
     };
 
+    async function handleUpdateChannelName(teamId, channelId, newChannelName) {
+        try {
+            if (!teamId || !channelId || !newChannelName) {
+                throw new Error("Invalid input: Missing teamId, channelId, or newChannelName.");
+            }
+    
+            // Reference to the Realtime Database channel document
+            const channelRef = ref(db, `teams/${teamId}/channels/${channelId}`);
+    
+            // Ensure the channel exists before trying to update
+            const channelSnapshot = await get(channelRef);
+            if (!channelSnapshot.exists()) {
+                throw new Error("Channel not found");
+            }
+    
+            // Update the channel name field in Realtime Database
+            await set(channelRef, {
+                name: newChannelName,
+            });
+    
+            console.log("Channel name updated successfully");
+        } catch (error) {
+            console.error("Error updating channel name:", error.message);
+        }
+    }
+    
     return (
         <div className="teamPageContainer">
             {/* Teams Sidebar */}
@@ -77,7 +106,7 @@ export default function TeamPageLayout() {
                 </NavLink>
 
                 {/* Teams Section */}
-                <Text fontSize="2xl" mb={4} color="white">
+                <Text fontSize="2xl" mb={4} color="white" textAlign="center">
                     Teams
                 </Text>
                 <VStack align="stretch" spacing={3} className="sidebarButtonContainer">
@@ -107,7 +136,7 @@ export default function TeamPageLayout() {
                 <Button
                     onClick={handleCreateTeamClick}
                     width="100%"
-                    variant="solid"
+                    variant="outline"
                     colorScheme="blue"
                     mt={4}
                     leftIcon={<FaPlus />}
@@ -116,6 +145,7 @@ export default function TeamPageLayout() {
                     _active={{ bg: "blue.800" }}
                     transition="all 0.3s ease-in-out"
                     borderRadius="30px"
+                    border={showCreateChannelInput ? "none" : "1px solid"}
                 >
                     Create Team
                 </Button>
@@ -197,6 +227,7 @@ export default function TeamPageLayout() {
                 showInviteUserInput={showInviteUserInput}
                 setShowInviteUserInput={setShowInviteUserInput}
                 handleInviteUser={handleInviteUser}
+                handleUpdateChannelName={handleUpdateChannelName}
             />
 
             {/* Right Panel with Chat */}

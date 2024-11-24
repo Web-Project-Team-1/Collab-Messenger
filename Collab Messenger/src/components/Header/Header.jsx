@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Header.css';
 import logo from '../../resources/Connecto.png';
-import { Button } from '@chakra-ui/react';
 
 function Header() {
     return (
