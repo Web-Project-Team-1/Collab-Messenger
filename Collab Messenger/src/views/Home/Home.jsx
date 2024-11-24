@@ -15,7 +15,7 @@ export default function Home() {
     useEffect(() => {
         const fetchUserCount = async () => {
             const count = await getAllUsers();
-            setUserCount(count);
+            setUserCount(count.length);
         };
 
         fetchUserCount();
