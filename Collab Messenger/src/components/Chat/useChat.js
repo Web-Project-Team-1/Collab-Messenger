@@ -27,7 +27,6 @@ export default function useChat(teamId, channelId) {
 
   const sendMessage = async () => {
     if (!message.trim()) return;
-
     const messageData = {
       text: message,
       senderId: user.uid,

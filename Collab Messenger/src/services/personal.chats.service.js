@@ -26,7 +26,7 @@ export const createPersonalChat = async (userId1, userId2) => {
     return chatId;
 };
 
-const sendMessage = async () => {
+export const sendMessage = async () => {
     if (!message.trim() || !user?.uid || !selectedReceiverId) return;
 
     const chatId = [user.uid, selectedReceiverId].sort().join('_');

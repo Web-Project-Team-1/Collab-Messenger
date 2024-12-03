@@ -67,12 +67,31 @@ export default function PersonalChats() {
                 >
                     {messages.length > 0 ? (
                         messages.map((msg, idx) => (
-                            <Box key={idx} mb={3}>
-                                <Text fontWeight="bold" color="teal.300">
-                                    {msg.username}:
-                                </Text>
-                                <Text color="white">{msg.text}</Text>
+                            <Box
+                                key={idx}
+                                mb={3}
+                                display="flex"
+                                justifyContent={msg.senderId === user.uid ? 'flex-end' : 'flex-start'}
+                            >
+                                <Box
+                                    bg={msg.senderId === user.uid ? 'blue.500' : 'gray.700'}
+                                    color="white"
+                                    px={4}
+                                    py={2}
+                                    borderRadius="lg"
+                                    width="50%"
+                                    boxShadow="md"
+                                >
+                                    <Text fontWeight="bold" color="teal.300">
+                                        {msg.senderId === user.uid ? 'You' : msg.username}
+                                    </Text>
+                                    <Text>{msg.text}</Text>
+                                    <Text fontSize="xs" opacity={0.6} textAlign="right">
+                                        {new Date(msg.timestamp).toLocaleTimeString()}
+                                    </Text>
+                                </Box>
                             </Box>
+
                         ))
                     ) : (
                         <Text color="gray.400">No messages yet. Start the conversation!</Text>
