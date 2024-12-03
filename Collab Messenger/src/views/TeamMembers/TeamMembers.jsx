@@ -7,6 +7,8 @@ import { Box, Text, Button, Input, Image } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import calendarIcon from "../../resources/calendar.png";
+import chatIcon from "../../resources/openai-icon.png"
+import ChatWithGPT from "../ChatWithGPT/ChatWithGPT";
 import "./TeamMembers.css";
 
 export default function TeamMembers({ teamId }) {
@@ -16,6 +18,7 @@ export default function TeamMembers({ teamId }) {
     const [showAllMembers, setShowAllMembers] = useState(false);
     const [overlayPosition, setOverlayPosition] = useState({ top: 0, left: 0 });
     const [searchTerm, setSearchTerm] = useState("");
+    const [showChatGPT, setShowChatGPT] = useState(false); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -89,6 +92,10 @@ export default function TeamMembers({ teamId }) {
 
     const openCalendar = () => {
         navigate("/calendar");
+    };
+
+    const toggleChatGPT = () => {
+        setShowChatGPT((prev) => !prev);
     };
 
     return (
@@ -246,7 +253,6 @@ export default function TeamMembers({ teamId }) {
                             </Box>
                         ))}
                         <Button
-                            width="100%"
                             variant="solid"
                             colorScheme="blue"
                             mt={4}
@@ -262,27 +268,45 @@ export default function TeamMembers({ teamId }) {
                         </Button>
                     </Box>
                 )}
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    mt={20}
-                    p={2}
-                    borderRadius="md"
-                    className="calendar-icon-container"
-                    position="relative"
-                >
-                    <NavLink
-                        to="/calendar"
-                        className={({ isActive }) => (isActive ? "active-link" : "")}
-                    >
-                        <img
-                            src={calendarIcon}
-                            alt="Calendar icon"
-                            className="calendar-icon"
-                        />
+                 {/* Calendar and ChatGPT Icons */}
+                 <Box display="flex" alignItems="center" mt={20} p={2} borderRadius="md" className="icon-container" >
+                    {/* Calendar Icon */}
+                    <NavLink to="/calendar" className={({ isActive }) => (isActive ? "active-link" : "")}>
+                        <img src={calendarIcon} alt="Calendar icon" width={50} className="icon" />
                     </NavLink>
-                    <Text className="calendar-tooltip">Calendar</Text>
+
+                    {/* ChatGPT Icon */}
+                    <Box onClick={toggleChatGPT} cursor="pointer" ml={4}>
+                        <img src={chatIcon} width={50} alt="ChatGPT icon" className="icon" />
+                    </Box>
                 </Box>
+
+                {/* ChatWithGPT Component */}
+                {showChatGPT && (
+                    <Box
+                    
+                        position="fixed"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        zIndex={1000}
+                        bg="white"
+                        borderRadius="8px"
+                        boxShadow="0 4px 12px rgba(0, 0, 0, 0.3)"
+                        p={6}
+                        maxWidth="90%"
+                    >
+                        <ChatWithGPT />
+                        <Button
+                            onClick={toggleChatGPT}
+                            mt={4}
+                            colorScheme="blue"
+                            width="100%"
+                        >
+                            Close
+                        </Button>
+                    </Box>
+                )}
             </div>
         </div>
     );

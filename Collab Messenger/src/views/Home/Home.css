@@ -130,11 +130,11 @@
     margin: 0;
     padding: 0;
     font-size: 2em;
-    font-family: 'Arizonia', cursive;
+    font-family: 'Arizonia';
 }
 
 .allUsersText {
-  font-family: 'Rock Salt', cursive;
+  font-family: 'Rock Salt';
   font-size: 1.3rem;
   animation: bounce 2s ease-in-out infinite, colorChange 2s ease-in-out infinite;
 }
