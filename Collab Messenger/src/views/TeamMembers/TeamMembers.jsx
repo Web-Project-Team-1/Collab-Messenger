@@ -10,6 +10,10 @@ import calendarIcon from "../../resources/calendar.png";
 import chatIcon from "../../resources/openai-icon.png"
 import ChatWithGPT from "../ChatWithGPT/ChatWithGPT";
 import "./TeamMembers.css";
+import { startCall, acceptCall, listenForIncomingCalls } from "../../services/call.service";
+import { auth } from "../../config/firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
+import CallPrompt from "../CallPrompt/CallPrompt";
 
 export default function TeamMembers({ teamId }) {
     const [teamMembers, setTeamMembers] = useState([]);
@@ -18,8 +22,24 @@ export default function TeamMembers({ teamId }) {
     const [showAllMembers, setShowAllMembers] = useState(false);
     const [overlayPosition, setOverlayPosition] = useState({ top: 0, left: 0 });
     const [searchTerm, setSearchTerm] = useState("");
-    const [showChatGPT, setShowChatGPT] = useState(false); 
+    const [showChatGPT, setShowChatGPT] = useState(false);
+    const [currentRoom, setCurrentRoom] = useState(null);
+    const [isCaller, setIsCaller] = useState(false);
+    const [user, setUser] = useState(null);
+    const [incomingCall, setIncomingCall] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                setUser(currentUser);
+            } else {
+                setUser(null);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
         const fetchTeamMembers = async () => {
@@ -48,6 +68,14 @@ export default function TeamMembers({ teamId }) {
 
         fetchTeamMembers();
     }, [teamId]);
+
+    useEffect(() => {
+        if (user) {
+            listenForIncomingCalls(user.uid, (callData) => {
+                setIncomingCall(callData);
+            });
+        }
+    }, [user]);
 
     const handleMemberClick = async (memberId, event) => {
         const userData = await getUserData(memberId);
@@ -98,6 +126,39 @@ export default function TeamMembers({ teamId }) {
         setShowChatGPT((prev) => !prev);
     };
 
+    const handleCall = async () => {
+        if (!user) {
+            console.error("User is not authenticated");
+            return;
+        }
+
+        if (!selectedMember) {
+            console.error("No member selected for the call");
+            return;
+        }
+
+        try {
+            await startCall(user.uid, selectedMember.id);
+            console.log(`Calling ${selectedMember.username}`);
+        } catch (error) {
+            console.error("Error starting the call:", error);
+        }
+    };
+
+    const handleAcceptCall = async () => {
+        if (!incomingCall) {
+            console.error("No incoming call to accept");
+            return;
+        }
+
+        try {
+            await acceptCall(incomingCall.callId);
+            console.log(`Accepted call from ${incomingCall.callerId}`);
+        } catch (error) {
+            console.error("Error accepting the call:", error);
+        }
+    };
+
     return (
         <div className="members">
             <div className="team-members-container">
@@ -145,6 +206,15 @@ export default function TeamMembers({ teamId }) {
                     )}
                 </Box>
 
+                {/* Show Call Prompt if there's an incoming call */}
+                {incomingCall && (
+                    <CallPrompt
+                        callerId={incomingCall.callerId}
+                        calleeId={user.uid}
+                        onReject={() => setIncomingCall(null)}
+                    />
+                )}
+
                 {showMemberOverlay && selectedMember && (
                     <Box
                         className="memberDetailsOverlay"
@@ -191,24 +261,46 @@ export default function TeamMembers({ teamId }) {
                                 <b>Phone:</b> {selectedMember.phone}
                             </Text>
                         )}
-                        <Button width="100%" onClick={handleSendMessage} mb={2}
+
+                        {/* Send Message Button */}
+                        <Button
+                            width="100%"
+                            onClick={handleSendMessage}
+                            mb={2}
                             variant="solid"
                             colorScheme="blue"
                             mt={4}
-                            leftIcon={<FaPlus />}
                             _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
                             _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
                             _active={{ bg: "blue.800" }}
                             transition="all 0.3s ease-in-out"
-                            borderRadius="30px" >
+                            borderRadius="30px"
+                        >
                             Send Message
                         </Button>
+
+                        {/* Call Button (Simple) */}
+                        <Button
+                            width="100%"
+                            variant="solid"
+                            colorScheme="green"
+                            mt={4}
+                            _hover={{ bg: "green.600", transform: "scale(1.05)" }}
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                            _active={{ bg: "green.800" }}
+                            transition="all 0.3s ease-in-out"
+                            borderRadius="30px"
+                            onClick={handleCall}
+                        >
+                            Start Call
+                        </Button>
+
+                        {/* Close Button */}
                         <Button
                             width="100%"
                             variant="solid"
                             colorScheme="blue"
                             mt={4}
-                            leftIcon={<FaPlus />}
                             _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
                             _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
                             _active={{ bg: "blue.800" }}
@@ -220,6 +312,7 @@ export default function TeamMembers({ teamId }) {
                         </Button>
                     </Box>
                 )}
+
 
                 {showAllMembers && (
                     <Box
@@ -268,8 +361,8 @@ export default function TeamMembers({ teamId }) {
                         </Button>
                     </Box>
                 )}
-                 {/* Calendar and ChatGPT Icons */}
-                 <Box display="flex" alignItems="center" mt={20} p={2} borderRadius="md" className="icon-container" >
+                {/* Calendar and ChatGPT Icons */}
+                <Box display="flex" alignItems="center" mt={20} p={2} borderRadius="md" className="icon-container" >
                     {/* Calendar Icon */}
                     <NavLink to="/calendar" className={({ isActive }) => (isActive ? "active-link" : "")}>
                         <img src={calendarIcon} alt="Calendar icon" width={50} className="icon" />
@@ -284,7 +377,7 @@ export default function TeamMembers({ teamId }) {
                 {/* ChatWithGPT Component */}
                 {showChatGPT && (
                     <Box
-                    
+
                         position="fixed"
                         top="50%"
                         left="50%"

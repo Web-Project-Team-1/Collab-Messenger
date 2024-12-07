@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { API_KEY } from '../../constants/constants';
 
 function ChatWithGPT() {
@@ -13,11 +13,11 @@ function ChatWithGPT() {
             setError('Please enter a message before submitting.');
             return;
         }
-    
+
         setLoading(true);
         setError('');
         setResponse('');
-    
+
         try {
             const res = await axios.post(
                 'https://api.openai.com/v1/chat/completions',
@@ -43,7 +43,7 @@ function ChatWithGPT() {
             setLoading(false);
         }
     };
-    
+
 
     return (
         <div>
@@ -52,7 +52,7 @@ function ChatWithGPT() {
                 placeholder="Ask ChatGPT something..."
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
-                disabled={loading} 
+                disabled={loading}
             />
             <button onClick={handleChat} disabled={loading}>
                 {loading ? 'Loading...' : 'Ask ChatGPT'}
