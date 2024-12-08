@@ -90,6 +90,7 @@ const Login = () => {
                         <Button
                             variant="link"
                             color="blue.500"
+                            bg={"transparent"}
                             onClick={() => navigate('/register')}
                         >
                             Register

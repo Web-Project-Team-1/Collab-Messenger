@@ -8,6 +8,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import calendarIcon from "../../resources/calendar.png";
 import chatIcon from "../../resources/openai-icon.png"
+import Calendar from "../Calendar/Calendar";
 import ChatWithGPT from "../ChatWithGPT/ChatWithGPT";
 import "./TeamMembers.css";
 import { startCall, acceptCall, listenForIncomingCalls } from "../../services/call.service";
@@ -22,6 +23,7 @@ export default function TeamMembers({ teamId }) {
     const [showAllMembers, setShowAllMembers] = useState(false);
     const [overlayPosition, setOverlayPosition] = useState({ top: 0, left: 0 });
     const [searchTerm, setSearchTerm] = useState("");
+    const [showCalendar, setShowCalendar] = useState(false);
     const [showChatGPT, setShowChatGPT] = useState(false);
     const [currentRoom, setCurrentRoom] = useState(null);
     const [isCaller, setIsCaller] = useState(false);
@@ -118,13 +120,11 @@ export default function TeamMembers({ teamId }) {
         setShowAllMembers(false);
     };
 
-    const openCalendar = () => {
-        navigate("/calendar");
-    };
-
     const toggleChatGPT = () => {
         setShowChatGPT((prev) => !prev);
     };
+
+    const toggleCalendar = () => setShowCalendar((prev) => !prev);
 
     const handleCall = async () => {
         if (!user) {
@@ -364,9 +364,9 @@ export default function TeamMembers({ teamId }) {
                 {/* Calendar and ChatGPT Icons */}
                 <Box display="flex" alignItems="center" mt={20} p={2} borderRadius="md" className="icon-container" >
                     {/* Calendar Icon */}
-                    <NavLink to="/calendar" className={({ isActive }) => (isActive ? "active-link" : "")}>
-                        <img src={calendarIcon} alt="Calendar icon" width={50} className="icon" />
-                    </NavLink>
+                    <Box onClick={toggleCalendar} cursor="pointer" ml={4}>
+                        <img src={calendarIcon} width={50} alt="Calendar icon" className="icon" />
+                    </Box>
 
                     {/* ChatGPT Icon */}
                     <Box onClick={toggleChatGPT} cursor="pointer" ml={4}>
@@ -374,13 +374,47 @@ export default function TeamMembers({ teamId }) {
                     </Box>
                 </Box>
 
+                {/* Calendar Box */}
+                {showCalendar && (
+                    <Box
+                        mt={33}
+                        className="calendarBox"
+                        position="absolute"
+                        top="10%"  
+                        left="50%"
+                        transform="translate(-50%, 0)"
+                        bg="gray.900"
+                        p={5}  
+                        borderRadius="12px"  
+                        boxShadow="0 6px 12px rgba(0, 0, 0, 0.2)"
+                        zIndex={1000}
+                    >
+                        <Text fontSize="23px" fontWeight="bold" color="white" mb={4} mt={4} textAlign="center">
+                            Team Calendar
+                        </Text>
+                        <Calendar />
+                        <Button
+                            mt={4}
+                            colorScheme="red"
+                            onClick={toggleCalendar}
+                            size="sm"
+                            borderRadius="md"
+                            textAlign="center"
+                            display="block"  
+                            mx="auto"  
+                        >
+                            Close
+                        </Button>
+                    </Box>
+                )}
+
                 {showChatGPT && (
                     <Box
                         position="fixed"
                         top="50%"
                         left="50%"
                         transform="translate(-50%, -50%)"
-                        zIndex={1000} 
+                        zIndex={1000}
                         bg="gray"
                         borderRadius="8px"
                         boxShadow="0 4px 12px rgba(0, 0, 0, 0.3)"

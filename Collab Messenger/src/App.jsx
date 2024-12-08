@@ -107,14 +107,6 @@ function App() {
               </AuthenticatedRoute>
             }
           />
-          <Route
-            path="/calendar"
-            element={
-              <AuthenticatedRoute>
-                <CalendarPage />
-              </AuthenticatedRoute>
-            }
-          />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

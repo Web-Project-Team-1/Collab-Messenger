@@ -84,7 +84,7 @@ const Register = () => {
           boxShadow="lg"
           bg="gray.800"
           color="white"
-          mt={-20} // Adjust this to move it closer to the top
+          mt={-20} 
         >
           <Heading as="h2" size="xl" textAlign="center" mb={4}>
             Register
@@ -172,6 +172,7 @@ const Register = () => {
             Already have an account?{" "}
             <Button
               variant="link"
+              bg={"transparent"}
               color="blue.500"
               onClick={() => navigate("/login")}
             >
