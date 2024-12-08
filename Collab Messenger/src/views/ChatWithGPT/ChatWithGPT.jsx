@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
-import { API_KEY } from '../../constants/constants';
+import axios from 'axios';
+import './ChatWithGPT.css';
 
 function ChatWithGPT() {
     const [userMessage, setUserMessage] = useState('');
     const [response, setResponse] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
+    const HF_API_KEY = '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';
 
     const handleChat = async () => {
         if (!userMessage.trim()) {
@@ -20,19 +24,20 @@ function ChatWithGPT() {
 
         try {
             const res = await axios.post(
-                'https://api.openai.com/v1/chat/completions',
-                {
-                    model: 'gpt-3.5-turbo',
-                    messages: [{ role: 'user', content: userMessage }]
-                },
+                'https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-2.7B',
+                { inputs: userMessage },
                 {
                     headers: {
-                        'Authorization': `Bearer ${API_KEY}`,
-                        'Content-Type': 'application/json'
-                    }
+                        Authorization: `Bearer ${HF_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
                 }
             );
-            setResponse(res.data.choices[0]?.message?.content || 'No response from GPT.');
+
+            const cleanedResponse = cleanResponse(res.data[0]?.generated_text) || 'No valid response from the model.';
+            setResponse(cleanedResponse);
+            setModalContent(cleanedResponse);
+            setShowModal(true);
         } catch (error) {
             setError(
                 'Error: ' +
@@ -44,22 +49,46 @@ function ChatWithGPT() {
         }
     };
 
+    const cleanResponse = (response) => {
+        const maxLength = 200;
+
+        let cleaned = response.replace(/(\d+\s?[\+\-\*\/\(\)]+)|(\d{3,})/g, '').trim();
+        cleaned = cleaned.replace(/\n+/g, ' ').replace(/\s{2,}/g, ' ');
+        cleaned = cleaned.length > maxLength ? cleaned.substring(0, maxLength) + '...' : cleaned;
+
+        return cleaned;
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
 
     return (
-        <div>
+        <div className="chatgpt-container">
             <input
+                className="chatgpt-input"
                 type="text"
-                placeholder="Ask ChatGPT something..."
+                placeholder="Ask something..."
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 disabled={loading}
             />
-            <button onClick={handleChat} disabled={loading}>
-                {loading ? 'Loading...' : 'Ask ChatGPT'}
+            <button className="chatgpt-button" onClick={handleChat} disabled={loading}>
+                {loading ? 'Loading...' : 'Ask GPT'}
             </button>
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {response && <p>ChatGPT says: {response}</p>}
+            {error && <p className="chatgpt-error-text">{error}</p>}
+
+            {/* Modal View for Response */}
+            {showModal && (
+                <div className="chatgpt-modal-overlay">
+                    <div className="chatgpt-modal-content">
+                        <h2 className="chatgpt-modal-heading">Response</h2>
+                        <p className="chatgpt-modal-text">{modalContent}</p>
+                        <button onClick={closeModal} className="chatgpt-modal-close-button">Close</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
