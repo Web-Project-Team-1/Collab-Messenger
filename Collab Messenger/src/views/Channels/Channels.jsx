@@ -168,9 +168,14 @@ export default function Channels({
                     <Button
                         onClick={handleSettingsCancel}
                         width="100%"
-                        variant="outline"
-                        colorScheme="gray"
+                        variant="solid"
+                        colorScheme="blue"
                         mt={4}
+                        _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+                        _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                        _active={{ bg: "blue.800" }}
+                        transition="all 0.3s ease-in-out"
+                        borderRadius="30px"
                     >
                         Close
                     </Button>

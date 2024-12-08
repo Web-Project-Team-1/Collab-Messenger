@@ -26,6 +26,7 @@ export default function UserInfo() {
             display="flex"
             alignItems="center"
             boxShadow="lg"
+            pt={30}
         >
             <HStack spacing={3} >
                 {/* User's Profile Picture */}
