@@ -19,5 +19,6 @@ main {
 }
 
 button {
-    color: rgb(134, 134, 250)
+    color: rgb(134, 134, 250);
+    background-color: black
 }
