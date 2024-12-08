@@ -32,22 +32,25 @@ export default function TeamPageLayout() {
 
     const setActiveTeamIdWithDefaultChannel = (teamId) => {
         setActiveTeamId(teamId);
-        const selectedTeam = teams.find((team) => team.id === teamId);
-        if (selectedTeam && selectedTeam.channels.length > 0) {
-            const generalChannel = selectedTeam.channels.find(
-                (channel) => channel.name.toLowerCase() === "general"
-            );
-            setActiveChannelId(generalChannel ? generalChannel.id : selectedTeam.channels[0].id);
-        } else {
-            setActiveChannelId(null);
+
+        if (!activeChannelId) {
+            const selectedTeam = teams.find((team) => team.id === teamId);
+            if (selectedTeam && selectedTeam.channels.length > 0) {
+                const generalChannel = selectedTeam.channels.find(
+                    (channel) => channel.name.toLowerCase() === "general"
+                );
+                setActiveChannelId(generalChannel ? generalChannel.id : selectedTeam.channels[0].id);
+            } else {
+                setActiveChannelId(null);
+            }
         }
     };
 
     useEffect(() => {
-        if (teams.length > 0) {
+        if (teams.length > 0 && !activeTeamId) {
             setActiveTeamIdWithDefaultChannel(teams[0].id);
         }
-    }, [teams]);
+    }, [teams, activeTeamId]);
 
     const [newChannelName, setNewChannelName] = useState("");
     const [showCreateTeamInput, setShowCreateTeamInput] = useState(false);

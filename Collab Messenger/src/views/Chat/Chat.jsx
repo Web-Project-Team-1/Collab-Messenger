@@ -1,5 +1,5 @@
 import { Box, VStack, HStack, Input, Button, Text } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../../store/app.context";
 import useChat from "../../components/Chat/useChat";
 
@@ -8,9 +8,12 @@ export default function Chat({ teamId, channelId }) {
   const { messages, message, setMessage, sendMessage } = useChat(teamId, channelId);
 
   const handleSendMessage = (e) => {
-    e.preventDefault(); // Prevent page refresh
+    e.preventDefault();
     sendMessage();
   };
+
+  useEffect(() => {
+  }, [teamId, channelId]);
 
   return (
     <VStack h="790px" mt={47} spacing={0} align="stretch" bg="gray.900">
