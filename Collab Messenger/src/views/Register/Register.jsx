@@ -1,4 +1,4 @@
-import { Button, Input, Stack, Box, Heading, Text, Flex, Center } from "@chakra-ui/react";
+import { Button, Input, Stack, Box, Heading, Text } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import {
   PasswordInput,
@@ -12,16 +12,17 @@ import "./Register.css";
 
 const Register = () => {
   const [user, setUser] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: "",
   });
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const { setAppState } = useContext(AppContext);
   const navigate = useNavigate();
 
   const register = async () => {
     if (!user.username || !user.email || !user.password) {
-      return alert('Please fill out all fields');
+      return alert("Please fill out all fields");
     }
 
     try {
@@ -30,27 +31,45 @@ const Register = () => {
         throw new Error(`User ${user.username} already exists`);
       }
 
-      const credential = await registerUser(user.email, user.password, user.username);
+      const credential = await registerUser(
+        user.email,
+        user.password,
+        user.username
+      );
       await createUserHandle(user.username, credential.user.uid, user.email);
 
       setAppState({
         user: credential.user,
-        userData: null
+        userData: null,
       });
 
-      // Redirect to the login page after successful registration
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Register failed', error);
-      alert('Registration failed: ' + error.message);
+      console.error("Register failed", error);
+      alert("Registration failed: " + error.message);
     }
   };
 
   const updateUser = (prop) => (e) => {
+    const value = e.target.value;
     setUser({
       ...user,
-      [prop]: e.target.value
+      [prop]: value,
     });
+
+    if (prop === "password") {
+      setPasswordStrength(calculatePasswordStrength(value));
+    }
+  };
+
+  const calculatePasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return Math.min(strength, 4);
   };
 
   return (
@@ -67,8 +86,12 @@ const Register = () => {
           color="white"
           mt={-20} // Adjust this to move it closer to the top
         >
-          <Heading as="h2" size="xl" textAlign="center" mb={4}>Register</Heading>
-          <Text textAlign="center" mb={4}>Fill in the form below to create an account</Text>
+          <Heading as="h2" size="xl" textAlign="center" mb={4}>
+            Register
+          </Heading>
+          <Text textAlign="center" mb={4}>
+            Fill in the form below to create an account
+          </Text>
           <Stack gap="4" w="full">
             {/* Username Field */}
             <Stack>
@@ -79,7 +102,7 @@ const Register = () => {
                 id="username"
                 placeholder="Username"
                 value={user.username}
-                onChange={updateUser('username')}
+                onChange={updateUser("username")}
                 bg="gray.700"
                 _hover={{ bg: "gray.600" }}
                 _focus={{ bg: "gray.600" }}
@@ -97,7 +120,7 @@ const Register = () => {
                 type="email"
                 placeholder="Email"
                 value={user.email}
-                onChange={updateUser('email')}
+                onChange={updateUser("email")}
                 bg="gray.700"
                 _hover={{ bg: "gray.600" }}
                 _focus={{ bg: "gray.600" }}
@@ -114,22 +137,34 @@ const Register = () => {
                 id="password"
                 placeholder="Password"
                 value={user.password}
-                onChange={updateUser('password')}
+                onChange={updateUser("password")}
                 bg="gray.700"
                 _hover={{ bg: "gray.600" }}
                 _focus={{ bg: "gray.600" }}
                 color="white"
               />
-              <PasswordStrengthMeter value={2} /> {/* Adjust `value` based on logic */}
+              <PasswordStrengthMeter value={passwordStrength} />
             </Stack>
           </Stack>
 
           {/* Buttons */}
           <Stack direction="row" spacing={4} justify="flex-end" mt={4}>
             {/* Cancel Button */}
-            <Button className="cancel-register-button" variant="solid" onClick={() => navigate('/')}>Cancel</Button>
+            <Button
+              className="cancel-register-button"
+              variant="solid"
+              onClick={() => navigate("/")}
+            >
+              Cancel
+            </Button>
             {/* Register Button */}
-            <Button className="register-button" variant="solid" onClick={register}>Register</Button>
+            <Button
+              className="register-button"
+              variant="solid"
+              onClick={register}
+            >
+              Register
+            </Button>
           </Stack>
 
           {/* "Already have an account?" link below the buttons */}
@@ -138,7 +173,7 @@ const Register = () => {
             <Button
               variant="link"
               color="blue.500"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate("/login")}
             >
               Login
             </Button>
