@@ -95,8 +95,87 @@ export default function Channels({
                     cursor="pointer"
                     ml={4}
                 >
+                    <Text className="emoji" fontSize="2xl" color="white">⚙️</Text>
+                    <Text className="settingsText">Settings</Text>
                 </Box>
             </Box>
+
+            {/* Settings Modal */}
+            {showSettingsModal && (
+                <Box
+                    className="settingsOverlay"
+                    position="absolute"
+                    top="150px"
+                    left="300px"
+                    p={4}
+                    bg="gray.800"
+                    borderRadius="md"
+                    boxShadow="lg"
+                    zIndex="10"
+                    border="1px solid"
+                    borderColor={"blue.500"}
+                >
+                    <Text color="white" mb={4} fontSize="lg">
+                        Edit Channel Names
+                    </Text>
+                    <VStack align="stretch" spacing={3}>
+                        {activeTeam?.channels.map((channel) => (
+                            <HStack key={channel.id} align="center" spacing={2}>
+                                {editingChannelId === channel.id ? (
+                                    <>
+                                        <Input
+                                            value={editedChannelName}
+                                            onChange={(e) => setEditedChannelName(e.target.value)}
+                                            bg="gray.700"
+                                            color="white"
+                                            _placeholder={{ color: "gray.400" }}
+                                        />
+                                        <Button
+                                            onClick={() => saveChannelName(channel.id)}
+                                            variant="solid"
+                                            colorScheme="blue"
+                                            size="sm"
+                                        >
+                                            Save
+                                        </Button>
+                                        <Button
+                                            onClick={cancelEditingChannel}
+                                            variant="outline"
+                                            colorScheme="gray"
+                                            size="sm"
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Text color="white">{channel.name}</Text>
+                                        <Button
+                                            onClick={() => startEditingChannel(channel.id, channel.name)}
+                                            bg="gray.700"
+                                            variant={"outline"}
+                                            borderRadius={30}
+                                            size={"sm"}
+                                            border={"1px solid"}
+                                        >
+                                            <img src={editIcon} alt="edit" width="16" height="16" />
+                                        </Button>
+                                    </>
+                                )}
+                            </HStack>
+                        ))}
+                    </VStack>
+                    <Button
+                        onClick={handleSettingsCancel}
+                        width="100%"
+                        variant="outline"
+                        colorScheme="gray"
+                        mt={4}
+                    >
+                        Close
+                    </Button>
+                </Box>
+            )}
 
             {/* Invite User Input Overlay */}
             {showInviteUserInput && (
@@ -165,66 +244,26 @@ export default function Channels({
             <VStack align="stretch" spacing={3}>
                 {activeTeam?.channels.map((channel) => (
                     <HStack key={channel.id} align="center" spacing={2}>
-                        {editingChannelId === channel.id ? (
-                            <>
-                                <Input
-                                    value={editedChannelName}
-                                    onChange={(e) => setEditedChannelName(e.target.value)}
-                                    bg="gray.700"
-                                    color="white"
-                                    _placeholder={{ color: "gray.400" }}
-                                />
-                                <Button
-                                    onClick={() => saveChannelName(channel.id)}
-                                    variant="solid"
-                                    colorScheme="blue"
-                                    size="sm"
-                                >
-                                    Save
-                                </Button>
-                                <Button
-                                    onClick={cancelEditingChannel}
-                                    variant="outline"
-                                    colorScheme="gray"
-                                    size="sm"
-                                >
-                                    Cancel
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    variant="solid"
-                                    colorScheme="teal"
-                                    onClick={() => setActiveChannelId(channel.id)}
-                                    width="100%"
-                                    border="1px solid"
-                                    borderColor={channel.id === activeChannelId ? "blue.500" : "gray.600"}
-                                    bg={channel.id === activeChannelId ? "gray.700" : "gray.800"}
-                                    _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
-                                    _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
-                                    _active={{ bg: "blue.600" }}
-                                    transition="all 0.3s ease-in-out"
-                                    borderRadius="30px"
-                                >
-                                    {channel.name}
-                                </Button>
-                                <Button
-                                    onClick={() => startEditingChannel(channel.id, channel.name)}
-                                    bg="gray.700"
-                                    variant={"outline"}
-                                    borderRadius={30}
-                                    size={"sm"}
-                                    border={"1px solid "}
-                                >
-                                    <img src={editIcon} alt="edit" width="20" height="20" />
-                                </Button>
-
-                            </>
-                        )}
+                        <Button
+                            variant="solid"
+                            colorScheme="teal"
+                            onClick={() => setActiveChannelId(channel.id)}
+                            width="100%"
+                            border="1px solid"
+                            borderColor={channel.id === activeChannelId ? "blue.500" : "gray.600"}
+                            bg={channel.id === activeChannelId ? "gray.700" : "gray.800"}
+                            _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                            _active={{ bg: "blue.600" }}
+                            transition="all 0.3s ease-in-out"
+                            borderRadius="30px"
+                        >
+                            {channel.name}
+                        </Button>
                     </HStack>
                 ))}
             </VStack>
+
 
             {/* Create Channel Button */}
             <Button

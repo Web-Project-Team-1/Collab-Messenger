@@ -11,7 +11,7 @@ import { NavLink } from "react-router-dom";
 import dms from "../../resources/dms.png";
 import { db } from "../../config/firebase.config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { get, ref, set } from "firebase/database";
+import { get, ref, set, update } from "firebase/database";
 
 export default function TeamPageLayout() {
     const {
@@ -30,7 +30,7 @@ export default function TeamPageLayout() {
         handleCreateChannel,
     } = useTeamPage();
 
-       const setActiveTeamIdWithDefaultChannel = (teamId) => {
+    const setActiveTeamIdWithDefaultChannel = (teamId) => {
         setActiveTeamId(teamId);
         const selectedTeam = teams.find((team) => team.id === teamId);
         if (selectedTeam && selectedTeam.channels.length > 0) {
@@ -69,27 +69,24 @@ export default function TeamPageLayout() {
             if (!teamId || !channelId || !newChannelName) {
                 throw new Error("Invalid input: Missing teamId, channelId, or newChannelName.");
             }
-    
-            // Reference to the Realtime Database channel document
+
             const channelRef = ref(db, `teams/${teamId}/channels/${channelId}`);
-    
-            // Ensure the channel exists before trying to update
+
             const channelSnapshot = await get(channelRef);
             if (!channelSnapshot.exists()) {
                 throw new Error("Channel not found");
             }
-    
-            // Update the channel name field in Realtime Database
-            await set(channelRef, {
+
+            await update(channelRef, {
                 name: newChannelName,
             });
-    
+
             console.log("Channel name updated successfully");
         } catch (error) {
             console.error("Error updating channel name:", error.message);
         }
     }
-    
+
     return (
         <div className="teamPageContainer">
             {/* Teams Sidebar */}
