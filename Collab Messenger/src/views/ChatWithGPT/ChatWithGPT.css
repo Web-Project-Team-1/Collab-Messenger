@@ -3,16 +3,55 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    background-color: #f9f9f9;
-    /* Light gray background */
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 400px;
+    margin: 20px auto;
+    color: #333;
+}
+
+.chatgpt-chat-input {
     width: 100%;
-    max-width: 550px;
-    margin: 10px auto;
-    color: #000;
-    /* Ensure text is black */
+    padding: 12px;
+    margin: 15px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #333;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chatgpt-chat-input:focus {
+    outline: none;
+    border-color: #6c63ff;
+    box-shadow: 0 0 6px rgba(108, 99, 255, 0.5);
+}
+
+.chatgpt-chat-button {
+    background: linear-gradient(90deg, #6c63ff, #8e44ad);
+    color: #ffffff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+}
+
+.chatgpt-chat-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(108, 99, 255, 0.3);
+}
+
+.chatgpt-error-text {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 .chatgpt-modal-overlay {
@@ -21,104 +60,62 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
 }
 
-/* Chat input styling */
-.chatgpt-chat-input {
-    width: 100%;
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    font-size: 18px;
-    background-color: #fafafa;
-    color: #000;
-}
-
-/* Chat button styling */
-.chatgpt-chat-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 28px;
-    border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    cursor: pointer;
-    width: 100%;
-}
-
-/* Error message styling */
-.chatgpt-error-text {
-    color: red;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-/* Modal overlay */
-.chatgpt-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Modal content */
 .chatgpt-modal-content {
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 200%;
-    width: 1000px;
-    max-height: 100vh;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 500px;
+    max-height: 80vh;
     overflow-y: auto;
-    color: #000;
+    color: #333;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    text-align: left;
+    text-align: center;
 }
 
-/* Modal heading */
 .chatgpt-modal-heading {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
-    color: #333;
-    /* Slightly lighter black for the heading */
+    color: #6c63ff;
     margin-bottom: 15px;
 }
 
-/* Modal text */
 .chatgpt-modal-text {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.5;
-    /* Better readability with line spacing */
-    color: #000;
+    color: #555;
     margin-bottom: 20px;
     word-wrap: break-word;
-    /* Ensure long words break properly */
 }
 
-/* Modal close button styling */
 .chatgpt-modal-close-button {
-    background-color: #f44336;
+    background: #e2a31a;
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     transition: background-color 0.3s ease;
     margin-top: 10px;
 }
 
 .chatgpt-modal-close-button:hover {
-    background-color: #d32f2f;
+    background-color: #c0392b;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

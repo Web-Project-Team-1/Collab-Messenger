@@ -380,8 +380,8 @@ export default function TeamMembers({ teamId }) {
                         top="50%"
                         left="50%"
                         transform="translate(-50%, -50%)"
-                        zIndex={1000} /* Ensure this is less than the modal z-index */
-                        bg="white"
+                        zIndex={1000} 
+                        bg="gray"
                         borderRadius="8px"
                         boxShadow="0 4px 12px rgba(0, 0, 0, 0.3)"
                         p={6}
@@ -391,7 +391,6 @@ export default function TeamMembers({ teamId }) {
                         <Button className="CloseButtonChatGpt"
                             onClick={toggleChatGPT}
                             mt={4}
-                            colorScheme="blue"
                             width="100%"
                         >
                             Close

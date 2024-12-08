@@ -67,31 +67,34 @@ function ChatWithGPT() {
 
     return (
         <div className="chatgpt-chat-container">
+            <h1 style={{ color: '#6c63ff', fontSize: '24px', marginBottom: '15px' }}>
+                Chat with Cohere
+            </h1>
             <input
                 className="chatgpt-chat-input"
                 type="text"
-                placeholder="Ask something..."
+                placeholder="Type your question..."
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 disabled={loading}
             />
             <button className="chatgpt-chat-button" onClick={handleChat} disabled={loading}>
-                {loading ? 'Loading...' : 'Ask Cohere'}
+                {loading ? 'Thinking...' : 'Ask'}
             </button>
-
             {error && <p className="chatgpt-error-text">{error}</p>}
-
-            {/* Modal View for Response */}
             {showModal && (
                 <div className="chatgpt-modal-overlay">
                     <div className="chatgpt-modal-content">
                         <h2 className="chatgpt-modal-heading">Response</h2>
                         <p className="chatgpt-modal-text">{modalContent}</p>
-                        <button onClick={closeModal} className="chatgpt-modal-close-button">Close</button>
+                        <button onClick={closeModal} className="chatgpt-modal-close-button">
+                            Close
+                        </button>
                     </div>
                 </div>
             )}
         </div>
+
     );
 }
 
