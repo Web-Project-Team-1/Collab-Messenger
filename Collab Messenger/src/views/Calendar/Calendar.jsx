@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
+import './Calendar.css'
 
 export default function CalendarPage() {
     const [currentDate, setCurrentDate] = useState(new Date());
