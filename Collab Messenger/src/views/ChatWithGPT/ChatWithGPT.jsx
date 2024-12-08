@@ -10,7 +10,7 @@ function ChatWithGPT() {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState('');
 
-    const HF_API_KEY = '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';
+    const COHERE_API_KEY = 'hY4wj2lUB0MnM9R7IOocJAwX9vU9gqMAlGFwia59';
 
     const handleChat = async () => {
         if (!userMessage.trim()) {
@@ -24,20 +24,32 @@ function ChatWithGPT() {
 
         try {
             const res = await axios.post(
-                'https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-2.7B',
-                { inputs: userMessage },
+                'https://api.cohere.ai/generate',
+                {
+                    prompt: userMessage,
+                    max_tokens: 150,
+                    temperature: 0.7,
+                    top_p: 1,
+                    stop_sequences: ["\n"],
+                },
                 {
                     headers: {
-                        Authorization: `Bearer ${HF_API_KEY}`,
+                        Authorization: `Bearer ${COHERE_API_KEY}`,
                         'Content-Type': 'application/json',
                     },
                 }
             );
 
-            const cleanedResponse = cleanResponse(res.data[0]?.generated_text) || 'No valid response from the model.';
-            setResponse(cleanedResponse);
-            setModalContent(cleanedResponse);
-            setShowModal(true);
+            console.log(res.data);
+
+            if (res.data && res.data.text) {
+                const generatedText = res.data.text.trim() || 'No valid response from the model.';
+                setResponse(generatedText);
+                setModalContent(generatedText);
+                setShowModal(true);
+            } else {
+                setError('No valid response from the model.');
+            }
         } catch (error) {
             setError(
                 'Error: ' +
@@ -49,32 +61,22 @@ function ChatWithGPT() {
         }
     };
 
-    const cleanResponse = (response) => {
-        const maxLength = 200;
-
-        let cleaned = response.replace(/(\d+\s?[\+\-\*\/\(\)]+)|(\d{3,})/g, '').trim();
-        cleaned = cleaned.replace(/\n+/g, ' ').replace(/\s{2,}/g, ' ');
-        cleaned = cleaned.length > maxLength ? cleaned.substring(0, maxLength) + '...' : cleaned;
-
-        return cleaned;
-    };
-
     const closeModal = () => {
         setShowModal(false);
     };
 
     return (
-        <div className="chatgpt-container">
+        <div className="chatgpt-chat-container">
             <input
-                className="chatgpt-input"
+                className="chatgpt-chat-input"
                 type="text"
                 placeholder="Ask something..."
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 disabled={loading}
             />
-            <button className="chatgpt-button" onClick={handleChat} disabled={loading}>
-                {loading ? 'Loading...' : 'Ask GPT'}
+            <button className="chatgpt-chat-button" onClick={handleChat} disabled={loading}>
+                {loading ? 'Loading...' : 'Ask Cohere'}
             </button>
 
             {error && <p className="chatgpt-error-text">{error}</p>}

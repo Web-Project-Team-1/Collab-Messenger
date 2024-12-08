@@ -374,15 +374,13 @@ export default function TeamMembers({ teamId }) {
                     </Box>
                 </Box>
 
-                {/* ChatWithGPT Component */}
                 {showChatGPT && (
                     <Box
-
                         position="fixed"
                         top="50%"
                         left="50%"
                         transform="translate(-50%, -50%)"
-                        zIndex={1000}
+                        zIndex={1000} /* Ensure this is less than the modal z-index */
                         bg="white"
                         borderRadius="8px"
                         boxShadow="0 4px 12px rgba(0, 0, 0, 0.3)"
@@ -390,7 +388,7 @@ export default function TeamMembers({ teamId }) {
                         maxWidth="90%"
                     >
                         <ChatWithGPT />
-                        <Button
+                        <Button className="CloseButtonChatGpt"
                             onClick={toggleChatGPT}
                             mt={4}
                             colorScheme="blue"
