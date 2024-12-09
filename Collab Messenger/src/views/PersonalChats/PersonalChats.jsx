@@ -1,12 +1,15 @@
 import { Box, VStack, Button, Text, HStack, Input, Flex } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '../../store/app.context';
 import { useLocation } from 'react-router-dom';
 import usePersonalChats from '../../components/PersonalChats/usePersonalChats';
+import EmojiPicker from "emoji-picker-react";
 
 export default function PersonalChats() {
     const { user } = useContext(AppContext);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const location = useLocation();
+
     const {
         message,
         setMessage,
@@ -15,7 +18,20 @@ export default function PersonalChats() {
         selectedReceiverId,
         setSelectedReceiverId,
         sendMessage,
+        addReaction, 
     } = usePersonalChats(location.state?.receiverId || null);
+
+    const handleEmojiClick = (emojiObject) => {
+        setMessage((prev) => prev + emojiObject.emoji);
+    };
+
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (message.trim() !== "") {
+            sendMessage(message);
+            setMessage("");
+        }
+    };
 
     return (
         <Flex h="100vh" bg="gray.700">
@@ -27,7 +43,7 @@ export default function PersonalChats() {
                 boxShadow="lg"
                 overflowY="auto"
                 mt={14}
-                w="12%"
+                w="15%"
             >
                 <Text fontWeight="bold" color="white" fontSize="lg" mb={7} mt={4}>
                     Personal Chats
@@ -54,7 +70,7 @@ export default function PersonalChats() {
             </VStack>
 
             {/* Main chat area */}
-            <VStack w="75%" spacing={0} flex="1" bg="gray.900" p={4} mt={14}>
+            <VStack w="80%" spacing={0} flex="1" bg="gray.900" p={4} mt={14}>
                 {/* Message container */}
                 <Box
                     flex="1"
@@ -89,30 +105,77 @@ export default function PersonalChats() {
                                     <Text fontSize="xs" opacity={0.6} textAlign="right">
                                         {new Date(msg.timestamp).toLocaleTimeString()}
                                     </Text>
+                                    {/* Reactions */}
+                                    <HStack mt={2} spacing={2}>
+                                        {Object.entries(msg.reactions || {}).map(([emoji, count]) => (
+                                            <Box
+                                                key={emoji}
+                                                as="button"
+                                                onClick={() => addReaction(msg.id, emoji)}
+                                                px={2}
+                                                py={1}
+                                                borderRadius="md"
+                                                bg="gray.600"
+                                                color="white"
+                                                fontSize="sm"
+                                            >
+                                                {emoji} {count}
+                                            </Box>
+                                        ))}
+                                    </HStack>
                                 </Box>
                             </Box>
-
                         ))
                     ) : (
                         <Text color="gray.400">No messages yet. Start the conversation!</Text>
                     )}
                 </Box>
-
-                {/* Message input */}
-                <HStack w="full" p={4} spacing={4} bg="gray.800" borderTop="1px solid #333">
-                    <Input
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type a message"
-                        bg="gray.600"
-                        color="white"
-                        _placeholder={{ color: 'gray.400' }}
-                        flex="1"
-                    />
-                    <Button colorScheme="blue" onClick={sendMessage}>
-                        Send
-                    </Button>
-                </HStack>
+                {/* Input Section */}
+                <Box p={4} bg="gray.900" borderTop="1px solid" borderColor="gray.700" w="full">
+                    <form onSubmit={handleSendMessage}>
+                        <HStack spacing={2}>
+                            <Input
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                placeholder="Type a message..."
+                                bg="gray.700"
+                                color="white"
+                                _placeholder={{ color: "gray.400" }}
+                                flex="1"
+                                borderRadius="md"
+                            />
+                            <Button
+                                onClick={() => setShowEmojiPicker((prev) => !prev)}
+                                colorScheme="blue"
+                                px={4}
+                                _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+                                _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                                _active={{ bg: "blue.800" }}
+                                transition="all 0.3s ease-in-out"
+                                borderRadius="md"
+                            >
+                                😀
+                            </Button>
+                            {showEmojiPicker && (
+                                <Box position="absolute" bottom="70px" right="120px" zIndex="1000">
+                                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                </Box>
+                            )}
+                            <Button
+                                type="submit"
+                                colorScheme="blue"
+                                px={6}
+                                _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+                                _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                                _active={{ bg: "blue.800" }}
+                                transition="all 0.3s ease-in-out"
+                                borderRadius="md"
+                            >
+                                Send
+                            </Button>
+                        </HStack>
+                    </form>
+                </Box>
             </VStack>
         </Flex>
     );
