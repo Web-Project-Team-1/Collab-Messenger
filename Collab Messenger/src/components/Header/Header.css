@@ -1,53 +1,36 @@
-header {
-    color: white;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    background-color: black;
-    /* or any color you need */
-    padding: 10px 20px;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-}
-
-header nav ul {
-    list-style-type: none;
-    padding: 0;
+/* Remove default margin/padding and prevent scroll */
+body,
+html {
     margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Ensure the header doesn't push content */
+header {
+    background-color: black;
+    padding: 10px 20px;
+    width: 100%;
+    position: fixed;
+}
+
+.nav-links {
     display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     align-items: center;
+    width: 100%;
 }
 
-header nav ul li {
-    display: inline-block;
-}
-
-header nav ul li .logo {
-    height: 40px;
-    width: auto;
+.nav-links li {
     margin-right: 20px;
-    margin-left: 30px;
 }
 
-header nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-header nav ul li a.active-link {
-    text-decoration: none;
+.logout-btn {
+    margin-left: auto;
 }
 
 .logo {
-    height: 90px;
-    width: auto;
-    margin-right: 20px;
-    margin-left: 30px;
+    height: 40px;
 }

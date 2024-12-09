@@ -29,7 +29,7 @@ export default function TeamPageLayout() {
         handleInviteUser,
         handleCreateChannel,
     } = useTeamPage();
-   
+
     const setActiveTeamIdWithDefaultChannel = (teamId) => {
         setActiveTeamId(teamId);
 
@@ -251,6 +251,6 @@ export default function TeamPageLayout() {
                 )}
             </Box>
 
-            </div> 
+        </div>
     );
 }

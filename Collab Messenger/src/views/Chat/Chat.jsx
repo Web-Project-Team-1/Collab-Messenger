@@ -21,7 +21,7 @@ export default function Chat({ teamId, channelId }) {
   useEffect(() => {}, [teamId, channelId]);
 
   return (
-    <VStack h="790px" mt={47} spacing={0} align="stretch" bg="gray.900">
+    <VStack h="790px" mt={"75px"} spacing={0} align="stretch" bg="gray.900">
       {/* Messages Display */}
       <VStack
         flex="1"
