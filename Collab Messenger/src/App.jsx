@@ -13,7 +13,6 @@ import TeamPageLayout from './views/TeamPage/TeamPageLayout';
 import Profile from "./views/Profile/Profile";
 import { Spinner, Center } from "@chakra-ui/react";
 import PersonalChats from './views/PersonalChats/PersonalChats';
-import CalendarPage from './views/Calendar/Calendar';
 
 // Disable warnings in development
 if (process.env.NODE_ENV === "development") {

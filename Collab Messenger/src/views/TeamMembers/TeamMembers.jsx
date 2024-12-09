@@ -11,10 +11,8 @@ import chatIcon from "../../resources/openai-icon.png"
 import Calendar from "../Calendar/Calendar";
 import ChatWithGPT from "../ChatWithGPT/ChatWithGPT";
 import "./TeamMembers.css";
-import { startCall, acceptCall, listenForIncomingCalls } from "../../services/call.service";
 import { auth } from "../../config/firebase.config";
 import { onAuthStateChanged } from "firebase/auth";
-import CallPrompt from "../CallPrompt/CallPrompt";
 
 export default function TeamMembers({ teamId }) {
     const [teamMembers, setTeamMembers] = useState([]);
@@ -25,10 +23,7 @@ export default function TeamMembers({ teamId }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [showCalendar, setShowCalendar] = useState(false);
     const [showChatGPT, setShowChatGPT] = useState(false);
-    const [currentRoom, setCurrentRoom] = useState(null);
-    const [isCaller, setIsCaller] = useState(false);
     const [user, setUser] = useState(null);
-    const [incomingCall, setIncomingCall] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -71,13 +66,6 @@ export default function TeamMembers({ teamId }) {
         fetchTeamMembers();
     }, [teamId]);
 
-    useEffect(() => {
-        if (user) {
-            listenForIncomingCalls(user.uid, (callData) => {
-                setIncomingCall(callData);
-            });
-        }
-    }, [user]);
 
     const handleMemberClick = async (memberId, event) => {
         const userData = await getUserData(memberId);
@@ -126,39 +114,6 @@ export default function TeamMembers({ teamId }) {
 
     const toggleCalendar = () => setShowCalendar((prev) => !prev);
 
-    const handleCall = async () => {
-        if (!user) {
-            console.error("User is not authenticated");
-            return;
-        }
-
-        if (!selectedMember) {
-            console.error("No member selected for the call");
-            return;
-        }
-
-        try {
-            await startCall(user.uid, selectedMember.id);
-            console.log(`Calling ${selectedMember.username}`);
-        } catch (error) {
-            console.error("Error starting the call:", error);
-        }
-    };
-
-    const handleAcceptCall = async () => {
-        if (!incomingCall) {
-            console.error("No incoming call to accept");
-            return;
-        }
-
-        try {
-            await acceptCall(incomingCall.callId);
-            console.log(`Accepted call from ${incomingCall.callerId}`);
-        } catch (error) {
-            console.error("Error accepting the call:", error);
-        }
-    };
-
     return (
         <div className="members">
             <div className="team-members-container">
@@ -205,15 +160,6 @@ export default function TeamMembers({ teamId }) {
                         </Button>
                     )}
                 </Box>
-
-                {/* Show Call Prompt if there's an incoming call */}
-                {incomingCall && (
-                    <CallPrompt
-                        callerId={incomingCall.callerId}
-                        calleeId={user.uid}
-                        onReject={() => setIncomingCall(null)}
-                    />
-                )}
 
                 {showMemberOverlay && selectedMember && (
                     <Box
@@ -277,22 +223,6 @@ export default function TeamMembers({ teamId }) {
                             borderRadius="30px"
                         >
                             Send Message
-                        </Button>
-
-                        {/* Call Button (Simple) */}
-                        <Button
-                            width="100%"
-                            variant="solid"
-                            colorScheme="green"
-                            mt={4}
-                            _hover={{ bg: "green.600", transform: "scale(1.05)" }}
-                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
-                            _active={{ bg: "green.800" }}
-                            transition="all 0.3s ease-in-out"
-                            borderRadius="30px"
-                            onClick={handleCall}
-                        >
-                            Start Call
                         </Button>
 
                         {/* Close Button */}

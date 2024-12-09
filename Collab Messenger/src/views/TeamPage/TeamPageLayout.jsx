@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import dms from "../../resources/dms.png";
 import { db } from "../../config/firebase.config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+// import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { get, ref, set, update } from "firebase/database";
 
 export default function TeamPageLayout() {
@@ -29,7 +29,7 @@ export default function TeamPageLayout() {
         handleInviteUser,
         handleCreateChannel,
     } = useTeamPage();
-
+   
     const setActiveTeamIdWithDefaultChannel = (teamId) => {
         setActiveTeamId(teamId);
 
@@ -106,7 +106,7 @@ export default function TeamPageLayout() {
                 </NavLink>
 
                 {/* Teams Section */}
-                <Text fontSize="2xl" mb={4} color="white" textAlign="center">
+                <Text fontSize="2xl" mb={4} mt={6} color="white" textAlign="center">
                     Teams
                 </Text>
                 <VStack align="stretch" spacing={3} className="sidebarButtonContainer">
@@ -250,6 +250,7 @@ export default function TeamPageLayout() {
                     </Box>
                 )}
             </Box>
-        </div>
+
+            </div> 
     );
 }
