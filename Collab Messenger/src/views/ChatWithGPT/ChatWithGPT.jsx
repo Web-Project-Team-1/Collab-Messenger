@@ -4,7 +4,7 @@ import './ChatWithGPT.css';
 
 function ChatWithGPT() {
     const [userMessage, setUserMessage] = useState('');
-    const [response, setResponse] = useState('');
+    const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
@@ -20,7 +20,8 @@ function ChatWithGPT() {
 
         setLoading(true);
         setError('');
-        setResponse('');
+        setMessages(prevMessages => [...prevMessages, { sender: 'user', text: userMessage }]);
+        setUserMessage('');  // Clear input field
 
         try {
             const res = await axios.post(
@@ -44,7 +45,7 @@ function ChatWithGPT() {
 
             if (res.data && res.data.text) {
                 const generatedText = res.data.text.trim() || 'No valid response from the model.';
-                setResponse(generatedText);
+                setMessages(prevMessages => [...prevMessages, { sender: 'cohere', text: generatedText }]);
                 setModalContent(generatedText);
                 setShowModal(true);
             } else {
@@ -70,10 +71,25 @@ function ChatWithGPT() {
             <h1 style={{ color: '#6c63ff', fontSize: '24px', marginBottom: '15px' }}>
                 Chat with Cohere
             </h1>
+            <div className="chatgpt-chat-box">
+                {messages.map((message, index) => (
+                    <div
+                        key={index}
+                        className={`chatgpt-chat-bubble ${message.sender === 'user' ? 'user' : 'cohere'}`}
+                    >
+                        {message.text}
+                    </div>
+                ))}
+                {loading && (
+                    <div className="chatgpt-chat-bubble cohere">
+                        Thinking...
+                    </div>
+                )}
+            </div>
             <input
                 className="chatgpt-chat-input"
                 type="text"
-                placeholder="Type your question..."
+                placeholder="Type your message..."
                 value={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
                 disabled={loading}
@@ -81,20 +97,7 @@ function ChatWithGPT() {
             <button className="chatgpt-chat-button" onClick={handleChat} disabled={loading}>
                 {loading ? 'Thinking...' : 'Ask'}
             </button>
-            {error && <p className="chatgpt-error-text">{error}</p>}
-            {showModal && (
-                <div className="chatgpt-modal-overlay">
-                    <div className="chatgpt-modal-content">
-                        <h2 className="chatgpt-modal-heading">Response</h2>
-                        <p className="chatgpt-modal-text">{modalContent}</p>
-                        <button onClick={closeModal} className="chatgpt-modal-close-button">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
-
     );
 }
 
