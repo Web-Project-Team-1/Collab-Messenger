@@ -42,7 +42,7 @@ function Header() {
                     </li>
                     {isLoggedIn && (
                         <li className="logout-btn">
-                            <Button variant={"outline"} border="1px solid rgb(134, 134, 250);" borderRadius={20} onClick={handleLogout}>Logout</Button>
+                            <Button variant={"outline"} border="2px solid rgb(134, 134, 250);" borderRadius={20} onClick={handleLogout}>Logout</Button>
                         </li>
                     )}
                 </ul>
