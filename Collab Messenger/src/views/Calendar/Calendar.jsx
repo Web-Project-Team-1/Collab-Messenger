@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import './Calendar.css'
-
+import 'react-calendar/dist/Calendar.css';
 export default function CalendarPage() {
     const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -13,7 +12,7 @@ export default function CalendarPage() {
         <div>
             <Calendar
                 value={currentDate}
-                className="react-calendar"
+                className="react-calendar" 
                 tileClassName="custom-calendar-tile"
             />
         </div>
