@@ -50,7 +50,7 @@ export default function UserInfo() {
                     <Text className="settings-text">User Settings</Text>
                 </HStack>
             </HStack>
-                <Text color='white' fontSize="xs" mt={10} mx={10} mb={3}>Created on: <br /> {userData.createdOn.slice(0, 10)}</Text>
+                <Text color='white' fontSize="12px" mt={10}  mb={3}> Created: <br /> {userData.createdOn.slice(0, 10)}</Text>
         </Box>
     );
 }

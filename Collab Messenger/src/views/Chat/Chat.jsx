@@ -1,19 +1,24 @@
 import { Box, VStack, HStack, Input, Button, Text } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../store/app.context";
 import useChat from "../../components/Chat/useChat";
+import EmojiPicker from "emoji-picker-react";
 
 export default function Chat({ teamId, channelId }) {
   const { user } = useContext(AppContext);
   const { messages, message, setMessage, sendMessage } = useChat(teamId, channelId);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
     sendMessage();
   };
 
-  useEffect(() => {
-  }, [teamId, channelId]);
+  const handleEmojiClick = (emojiObject) => {
+    setMessage((prev) => prev + emojiObject.emoji);
+  };
+
+  useEffect(() => {}, [teamId, channelId]);
 
   return (
     <VStack h="790px" mt={47} spacing={0} align="stretch" bg="gray.900">
@@ -68,6 +73,23 @@ export default function Chat({ teamId, channelId }) {
               flex="1"
               borderRadius="md"
             />
+            <Button
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+              colorScheme="blue"
+              px={4}
+              _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
+              _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+              _active={{ bg: "blue.800" }}
+              transition="all 0.3s ease-in-out"
+              borderRadius="md"
+            >
+              😀
+            </Button>
+            {showEmojiPicker && (
+              <Box position="absolute" bottom="60px" right="90px" zIndex="1000">
+                <EmojiPicker onEmojiClick={handleEmojiClick} />
+              </Box>
+            )}
             <Button
               type="submit"
               colorScheme="blue"
