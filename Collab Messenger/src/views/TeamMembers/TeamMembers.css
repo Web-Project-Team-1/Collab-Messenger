@@ -50,7 +50,9 @@
     z-index: 10;
     position: absolute;
     color: #e2e8f0;
-    margin-left: -200px;
+    transition: all 0.2s ease-in-out;
+    width: 250px;
+    /* You can adjust the width based on your content */
 }
 
 .memberDetailsOverlay button {
