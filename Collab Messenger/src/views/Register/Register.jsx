@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/auth.service";
 import { createUserHandle, getUserByUsername } from "../../services/users.service";
 import "./Register.css";
+import { USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH } from "../../common/constants";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -23,6 +24,10 @@ const Register = () => {
   const register = async () => {
     if (!user.username || !user.email || !user.password) {
       return alert("Please fill out all fields");
+    }
+
+    if (user.username.length < USERNAME_MIN_LENGTH || user.username.length > USERNAME_MAX_LENGTH) {
+      return alert(`Username must be between ${USERNAME_MIN_LENGTH} and ${USERNAME_MAX_LENGTH} characters`);
     }
 
     try {
@@ -84,7 +89,7 @@ const Register = () => {
           boxShadow="lg"
           bg="gray.800"
           color="white"
-          mt={-20} 
+          mt={-20}
         >
           <Heading as="h2" size="xl" textAlign="center" mb={4}>
             Register

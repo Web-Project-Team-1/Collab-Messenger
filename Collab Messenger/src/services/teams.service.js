@@ -1,9 +1,18 @@
 import { ref, set, push, get, update } from 'firebase/database';
 import { db } from '../config/firebase.config';
+import { CHANNEL_NAME_MIN_LENGTH, CHANNEL_NAME_MAX_LENGTH } from '../common/constants';
+import { TEAM_NAME_MIN_LENGTH, TEAM_NAME_MAX_LENGTH } from '../common/constants';
+
 
 export const createTeam = async (teamName, ownerId) => {
     if (!teamName || !ownerId) {
         throw new Error("Team name and owner ID are required.");
+    }
+
+    if (teamName.length < TEAM_NAME_MIN_LENGTH || teamName.length > TEAM_NAME_MAX_LENGTH) {
+        throw new Error(
+            `Team name must be between ${TEAM_NAME_MIN_LENGTH} and ${TEAM_NAME_MAX_LENGTH} characters.`
+        );
     }
 
     const newTeamRef = push(ref(db, 'teams'));
@@ -48,6 +57,12 @@ export const inviteUserToTeam = async (teamId, username) => {
 export const createChannel = async (teamId, channelName) => {
     if (!teamId || !channelName) {
         throw new Error("Team ID and channel name are required.");
+    }
+
+    if (channelName.length < CHANNEL_NAME_MIN_LENGTH || channelName.length > CHANNEL_NAME_MAX_LENGTH) {
+        throw new Error(
+            `Channel name must be between ${CHANNEL_NAME_MIN_LENGTH} and ${CHANNEL_NAME_MAX_LENGTH} characters.`
+        );
     }
 
     const channelRef = push(ref(db, `teams/${teamId}/channels`));

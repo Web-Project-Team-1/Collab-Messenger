@@ -50,6 +50,7 @@
     z-index: 10;
     position: absolute;
     color: #e2e8f0;
+    margin-left: -200px;
 }
 
 .memberDetailsOverlay button {

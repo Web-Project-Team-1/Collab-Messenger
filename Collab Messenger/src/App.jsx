@@ -15,6 +15,21 @@ import PersonalChats from './views/PersonalChats/PersonalChats';
 import JitsiMeet from './components/JitsiMeet';
 import StartMeeting from './views/StartMeeting/StartMeeting';
 
+if (process.env.NODE_ENV !== 'production') {
+  const originalWarn = console.warn;
+  console.warn = (message, ...args) => {
+    if (
+      typeof message === 'string' &&
+      (message.includes('React Router Future Flag Warning') ||
+        message.includes('You can use the `v7_startTransition` future flag') ||
+        message.includes('v7_relativeSplatPath future flag'))
+    ) {
+      return; // Suppress the specific warnings
+    }
+    originalWarn(message, ...args); // Call the original console.warn for other warnings
+  };
+}
+
 function App() {
   const [appState, setAppState] = useState({
     user: null,

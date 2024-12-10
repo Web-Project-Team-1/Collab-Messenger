@@ -114,41 +114,6 @@ export default function TeamMembers({ teamId }) {
 
     const toggleCalendar = () => setShowCalendar((prev) => !prev);
 
-    // const handleMemberClick = async (memberId, event) => {
-    //     const userData = await getUserData(memberId);
-    //     if (userData) {
-    //         setSelectedMember({
-    //             id: memberId,
-    //             ...userData,
-    //             photoURL: userData.photoURL || defaultProfilePicture,
-    //         });
-    //         setShowMemberOverlay(true);
-    //     }
-    // };
-
-    // const handleLeaveTeam = async () => {
-    //     const userId = user.uid;
-
-    //     const teamRef = ref(db, `teams/${teamId}/members/${userId}`);
-    //     await update(teamRef, null); // Remove user from team
-
-    //     // Optionally navigate to another page
-    //     navigate("/teams");
-    // };
-
-    // const handleLeaveChannel = async (channelId) => {
-    //     const userId = user.uid;
-    //     const channelRef = ref(db, `channels/${channelId}/members/${userId}`);
-    //     await update(channelRef, null); // Remove user from channel
-
-    //     // Optionally navigate to another page
-    //     navigate("/channels");
-    // };
-
-    // const filteredMembers = teamMembers.filter((member) =>
-    //     member.username.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
-
     return (
         <div className="members">
             <div className="team-members-container">
@@ -204,7 +169,9 @@ export default function TeamMembers({ teamId }) {
                             left: `${overlayPosition.left}px`,
                             position: "absolute",
                             zIndex: 1001,
-                            background: "rgba(0, 0, 0, 0.8)",
+                            background: "rgba(0, 0, 0)",
+                            right: "50px",
+                            left: "1200px",
                             padding: "20px",
                             borderRadius: "8px",
                             width: "200px",
@@ -281,9 +248,9 @@ export default function TeamMembers({ teamId }) {
 
                 {showAllMembers && (
                     <Box
-                        position="fixed"
-                        top="50%"
-                        left="50%"
+                        position="absolute"
+                        top="45%"
+                        left="80%"
                         transform="translate(-50%, -50%)"
                         bg="gray.800"
                         color="white"
@@ -397,6 +364,6 @@ export default function TeamMembers({ teamId }) {
                     </Box>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
