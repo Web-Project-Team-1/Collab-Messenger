@@ -137,13 +137,13 @@ export default function TeamPageLayout() {
     return (
         <div className="teamPageContainer">
             {/* Teams Sidebar */}
-            <Box className="sidebar" p={4} bg="gray.900" borderRight="1px solid gray.700">
+            <Box className="sidebar" pt={2} p={4} bg="gray.900" borderRight="1px solid gray.700">
                 {/* DMS Section */}
                 <NavLink
                     to="/personal-chats"
                     className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
-                    <Box display="flex" alignItems="center" mt={20} p={2} borderRadius="md" className="direct-messages-container">
+                    <Box display="flex" alignItems="center" mt={7} p={2} borderRadius="md" className="direct-messages-container">
                         <img src={dms} alt="Direct Messages" style={{ width: "40px", marginLeft: "25px" }} />
                         <Text className="direct-messages-icon">Direct Messages</Text>
                     </Box>
@@ -263,8 +263,7 @@ export default function TeamPageLayout() {
                             _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
                             _active={{ bg: "red.700" }}
                             borderRadius="30px"
-                            border="1px solid red"
-                            bg="red.600"  
+                            bg="red.800"  
                             color="white" 
                         >
                             Leave Team

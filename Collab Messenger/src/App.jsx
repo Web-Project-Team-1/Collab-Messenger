@@ -8,7 +8,6 @@ import { auth } from './config/firebase.config';
 import { getUserData } from './services/users.service';
 import Signup from './views/Signup/Signup';
 import Home from './views/Home/Home';
-import Header from './components/Header/Header';
 import TeamPageLayout from './views/TeamPage/TeamPageLayout';
 import Profile from './views/Profile/Profile';
 import { Spinner, Center } from '@chakra-ui/react';
@@ -63,7 +62,6 @@ function App() {
   return (
     <AppContext.Provider value={{ ...appState, setAppState }}>
       <BrowserRouter>
-        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />

@@ -69,7 +69,7 @@ export default function Channels({
     };
 
     return (
-        <Box className="channelSidebar" pt={90} pl={2} pr={2} bg="gray.800" borderRight="1px solid gray.700">
+        <Box className="channelSidebar" pt={10} pl={2} pr={2} bg="gray.800" borderRight="1px solid gray.700">
             <Text fontSize="xl" color="white" fontWeight="bold" mb={2} textAlign="center">
                 {activeTeamName}
             </Text>
