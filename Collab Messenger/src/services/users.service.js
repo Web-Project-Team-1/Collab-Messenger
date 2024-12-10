@@ -55,9 +55,19 @@ export async function uploadProfilePicture(file, uid, username) {
 export const getAllUsers = async () => {
     const snapshot = await get(ref(db, 'users'));
     const usersData = snapshot.val();
-    
+
     if (usersData) {
-        return Object.keys(usersData);
+        return Object.keys(usersData).map(userId => {
+            const user = usersData[userId];
+            return {
+                id: userId,
+                username: user.username,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                photoURL: user.photoURL || null,
+            };
+        });
     }
 
+    return [];
 };

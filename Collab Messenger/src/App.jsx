@@ -10,23 +10,11 @@ import Signup from './views/Signup/Signup';
 import Home from './views/Home/Home';
 import Header from './components/Header/Header';
 import TeamPageLayout from './views/TeamPage/TeamPageLayout';
-import Profile from "./views/Profile/Profile";
-import { Spinner, Center } from "@chakra-ui/react";
+import Profile from './views/Profile/Profile';
+import { Spinner, Center } from '@chakra-ui/react';
 import PersonalChats from './views/PersonalChats/PersonalChats';
-
-// Disable warnings in development
-if (process.env.NODE_ENV === "development") {
-  const originalWarn = console.warn;
-  console.warn = (msg) => {
-    if (
-      msg.includes("React Router Future Flag Warning: React Router will begin wrapping state updates") ||
-      msg.includes("Relative route resolution within Splat routes is changing in v7")
-    ) {
-      return;
-    }
-    originalWarn(msg);
-  };
-}
+import JitsiMeet from './components/JitsiMeet';
+import StartMeeting from './views/StartMeeting/StartMeeting';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -81,7 +69,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-
           <Route
             path="/teams"
             element={
@@ -103,6 +90,23 @@ function App() {
             element={
               <AuthenticatedRoute>
                 <PersonalChats />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/video-call/:roomId"
+            element={
+              <AuthenticatedRoute>
+                <JitsiMeet />
+              </AuthenticatedRoute>
+            }
+          />
+          {/* Add route for StartMeeting */}
+          <Route
+            path="/start-meeting"
+            element={
+              <AuthenticatedRoute>
+                <StartMeeting />
               </AuthenticatedRoute>
             }
           />

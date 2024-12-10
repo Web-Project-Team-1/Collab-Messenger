@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Header.css';
 import logo from '../../resources/Connecto.png';
-import { Button } from '@chakra-ui/react';
-import { signOut } from 'firebase/auth'; 
-import { auth } from '../../config/firebase.config'; 
+import { signOut } from 'firebase/auth';
+import { auth } from '../../config/firebase.config';
 
 function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setIsLoggedIn(!!user); 
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setIsLoggedIn(!!user);
         });
 
         return () => unsubscribe();
@@ -20,11 +19,11 @@ function Header() {
 
     const handleLogout = async () => {
         try {
-            await signOut(auth); 
+            await signOut(auth);
             setIsLoggedIn(false);
-            navigate('/login'); 
+            navigate('/login');
         } catch (error) {
-            console.error("Error logging out: ", error);
+            console.error('Error logging out:', error);
         }
     };
 
@@ -33,17 +32,23 @@ function Header() {
             <nav>
                 <ul className="nav-links">
                     <li>
-                        <NavLink
-                            to="/"
-                            className={({ isActive }) => (isActive ? 'active-link' : '')}
-                        >
+                        <NavLink to="/">
                             <img src={logo} alt="Connecto Logo" className="logo" />
                         </NavLink>
                     </li>
                     {isLoggedIn && (
-                        <li className="logout-btn">
-                            <Button variant={"outline"} border="2px solid rgb(134, 134, 250);" borderRadius={20} onClick={handleLogout}>Logout</Button>
-                        </li>
+                        <>
+                            <li>
+                                <button className="start-meeting-btn" onClick={() => navigate('/start-meeting')}>
+                                    Start Meeting
+                                </button>
+                            </li>
+                            <li>
+                                <button className="logout-btn" onClick={handleLogout}>
+                                    Logout
+                                </button>
+                            </li>
+                        </>
                     )}
                 </ul>
             </nav>
