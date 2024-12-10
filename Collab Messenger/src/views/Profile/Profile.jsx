@@ -6,16 +6,20 @@ import { update } from "firebase/database";
 import defaultProfilePicture from "../../resources/defaultProfilePicture.png";
 import { db } from "../../config/firebase.config";
 import { ref } from "firebase/database";
-import "./profile.css"; 
+import { signOut } from 'firebase/auth';
+import { auth } from '../../config/firebase.config';
+import "./profile.css";
+import { useNavigate } from "react-router";
 
 export default function Profile() {
     const { user, userData, setAppState } = useContext(AppContext);
     const fileInputRef = useRef(null);
     const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
-
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [telephone, setTelephone] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     const [isEditingField, setIsEditingField] = useState({
         firstName: false,
@@ -41,6 +45,24 @@ export default function Profile() {
             } catch (error) {
                 console.error("Error uploading profile picture:", error);
             }
+        }
+    };
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setIsLoggedIn(!!user);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            setIsLoggedIn(false);
+            navigate('/login');
+        } catch (error) {
+            console.error('Error logging out:', error);
         }
     };
 
@@ -150,6 +172,13 @@ export default function Profile() {
                         <Text bg="gray.600" p={2} borderRadius="md" width="70%">{telephone || "Not set"}</Text>
                         <Button size="sm" onClick={() => setIsEditingField((prev) => ({ ...prev, telephone: true }))}>
                             Edit
+                        </Button>
+                    </HStack>
+                )}
+                {isLoggedIn && (
+                    <HStack justify="space-between" width="100%">
+                        <Button className="logout-btn" onClick={handleLogout} colorScheme="red" bg="red.600" color={"white"} borderRadius={30} w={"200px"} mx={"80px"} mt={3}>
+                            Logout
                         </Button>
                     </HStack>
                 )}

@@ -101,7 +101,6 @@ function App() {
               </AuthenticatedRoute>
             }
           />
-          {/* Add route for StartMeeting */}
           <Route
             path="/start-meeting"
             element={

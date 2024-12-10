@@ -60,7 +60,7 @@ export const getAllUsers = async () => {
         return Object.keys(usersData).map(userId => {
             const user = usersData[userId];
             return {
-                id: userId,
+                id: user.uid, 
                 username: user.username,
                 email: user.email,
                 isAdmin: user.isAdmin,

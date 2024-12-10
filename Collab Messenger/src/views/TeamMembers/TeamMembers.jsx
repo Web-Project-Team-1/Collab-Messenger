@@ -114,6 +114,41 @@ export default function TeamMembers({ teamId }) {
 
     const toggleCalendar = () => setShowCalendar((prev) => !prev);
 
+    // const handleMemberClick = async (memberId, event) => {
+    //     const userData = await getUserData(memberId);
+    //     if (userData) {
+    //         setSelectedMember({
+    //             id: memberId,
+    //             ...userData,
+    //             photoURL: userData.photoURL || defaultProfilePicture,
+    //         });
+    //         setShowMemberOverlay(true);
+    //     }
+    // };
+
+    // const handleLeaveTeam = async () => {
+    //     const userId = user.uid;
+
+    //     const teamRef = ref(db, `teams/${teamId}/members/${userId}`);
+    //     await update(teamRef, null); // Remove user from team
+
+    //     // Optionally navigate to another page
+    //     navigate("/teams");
+    // };
+
+    // const handleLeaveChannel = async (channelId) => {
+    //     const userId = user.uid;
+    //     const channelRef = ref(db, `channels/${channelId}/members/${userId}`);
+    //     await update(channelRef, null); // Remove user from channel
+
+    //     // Optionally navigate to another page
+    //     navigate("/channels");
+    // };
+
+    // const filteredMembers = teamMembers.filter((member) =>
+    //     member.username.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+
     return (
         <div className="members">
             <div className="team-members-container">
@@ -310,12 +345,12 @@ export default function TeamMembers({ teamId }) {
                         mt={33}
                         className="calendarBox"
                         position="absolute"
-                        top="10%"  
+                        top="10%"
                         left="50%"
                         transform="translate(-50%, 0)"
                         bg="gray.900"
-                        p={5}  
-                        borderRadius="12px"  
+                        p={5}
+                        borderRadius="12px"
                         boxShadow="0 6px 12px rgba(0, 0, 0, 0.2)"
                         zIndex={1000}
                     >
@@ -330,8 +365,8 @@ export default function TeamMembers({ teamId }) {
                             size="sm"
                             borderRadius="md"
                             textAlign="center"
-                            display="block"  
-                            mx="auto"  
+                            display="block"
+                            mx="auto"
                         >
                             Close
                         </Button>

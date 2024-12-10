@@ -6,12 +6,12 @@ import Channels from "../Channels/Channels";
 import "./TeamPageLayout.css";
 import TeamMembers from "../TeamMembers/TeamMembers";
 import { FaPlus, FaTimes } from 'react-icons/fa';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, act } from "react";
 import { NavLink } from "react-router-dom";
 import dms from "../../resources/dms.png";
 import { db } from "../../config/firebase.config";
-// import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { get, ref, set, update } from "firebase/database";
+import { AppContext } from "../../store/app.context";
 
 export default function TeamPageLayout() {
     const {
@@ -29,6 +29,10 @@ export default function TeamPageLayout() {
         handleInviteUser,
         handleCreateChannel,
     } = useTeamPage();
+
+    const { user } = useContext(AppContext);
+
+    console.log(user)
 
     const setActiveTeamIdWithDefaultChannel = (teamId) => {
         setActiveTeamId(teamId);
@@ -89,6 +93,46 @@ export default function TeamPageLayout() {
             console.error("Error updating channel name:", error.message);
         }
     }
+
+    const leaveTeam = async (userId, teamId) => {
+        try {
+            if (!userId || !teamId) {
+                throw new Error("Missing userId or teamId");
+            }
+
+            const teamRef = ref(db, `teams/${teamId}`);
+
+            const teamSnapshot = await get(teamRef);
+
+            if (!teamSnapshot.exists()) {
+                throw new Error("Team not found");
+            }
+
+            const teamData = teamSnapshot.val();
+            console.log(teamData.members);
+
+            const updatedMembers = {};
+            for (const [memberId, isMember] of Object.entries(teamData.members)) {
+                if (memberId !== userId) {
+                    updatedMembers[memberId] = isMember;
+                }
+            }
+
+            await update(teamRef, {
+                members: updatedMembers,
+            });
+
+            if (activeTeamId === teamId) {
+                setActiveTeamId(null);
+                setActiveChannelId(null);
+            }
+
+            console.log("User successfully left the team");
+        } catch (error) {
+            console.error("Error leaving the team:", error.message);
+        }
+    };
+
 
     return (
         <div className="teamPageContainer">
@@ -205,6 +249,28 @@ export default function TeamPageLayout() {
                             Cancel
                         </Button>
                     </Box>
+                )}
+                {user && (
+                    <div>
+                        <Button
+                            onClick={() => leaveTeam(user.uid, activeTeamId)}
+                            mt={4}
+                            width="100%"
+                            variant="solid"
+                            colorScheme="red"
+                            leftIcon={<FaTimes />}
+                            _hover={{ bg: "red.700" }}
+                            _focus={{ boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)" }}
+                            _active={{ bg: "red.700" }}
+                            borderRadius="30px"
+                            border="1px solid red"
+                            bg="red.600"  
+                            color="white" 
+                        >
+                            Leave Team
+                        </Button>
+
+                    </div>
                 )}
             </Box>
 

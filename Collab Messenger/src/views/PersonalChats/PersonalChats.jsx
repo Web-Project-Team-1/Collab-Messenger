@@ -1,7 +1,7 @@
 import { Box, VStack, Button, Text, HStack, Input, Flex } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../store/app.context';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import usePersonalChats from '../../components/PersonalChats/usePersonalChats';
 import EmojiPicker from "emoji-picker-react";
 
@@ -9,6 +9,7 @@ export default function PersonalChats() {
     const { user } = useContext(AppContext);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const {
         message,
@@ -18,7 +19,7 @@ export default function PersonalChats() {
         selectedReceiverId,
         setSelectedReceiverId,
         sendMessage,
-        addReaction, 
+        addReaction,
     } = usePersonalChats(location.state?.receiverId || null);
 
     const handleEmojiClick = (emojiObject) => {
@@ -67,6 +68,9 @@ export default function PersonalChats() {
                 ) : (
                     <Text color="gray.400">No chats available</Text>
                 )}
+                    <Button mt={3} w={"200px"} className="start-meeting-btn" onClick={() => navigate('/start-meeting')}>
+                        Start Call
+                    </Button>
             </VStack>
 
             {/* Main chat area */}

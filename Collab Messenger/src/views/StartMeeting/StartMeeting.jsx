@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../services/users.service';
 import { sendMessage } from '../../services/personal.chats.service';
+import { AppContext } from '../../store/app.context';
 import './StartMeeting.css';
 
-
 const StartMeeting = () => {
+
+    const { user } = useContext(AppContext);
+
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const navigate = useNavigate();
-    const currentUser =
 
         useEffect(() => {
             const fetchUsers = async () => {
@@ -18,17 +20,19 @@ const StartMeeting = () => {
             };
 
             fetchUsers();
+            setSelectedUser(user);
         }, []);
+
 
     const handleStartMeeting = async () => {
         if (selectedUser) {
             const roomId = `room-${Date.now()}`;
             const meetingLink = `${window.location.origin}/video-call/${roomId}`;
-            console.log(currentUser)
+            console.log(user)
 
             try {
                 await sendMessage({
-                    senderId: currentUser.id,
+                    senderId: user.uid,
                     receiverId: selectedUser.id,
                     message: `You are invited to a meeting. Click the link to join: ${meetingLink}`,
                 });
@@ -45,7 +49,7 @@ const StartMeeting = () => {
 
     return (
         <div className="start-meeting-container">
-            <h1>Start a Meeting</h1>
+            <h1>Start Call</h1>
             <div className="user-list">
                 {users.map((user) => (
                     <div
@@ -58,7 +62,7 @@ const StartMeeting = () => {
                 ))}
             </div>
             <button className="start-meeting-btn" onClick={handleStartMeeting}>
-                Start Meeting
+                Start Call
             </button>
         </div>
     );
