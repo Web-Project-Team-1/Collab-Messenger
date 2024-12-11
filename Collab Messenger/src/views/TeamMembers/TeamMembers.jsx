@@ -79,6 +79,7 @@ export default function TeamMembers({ teamId }) {
             setShowMemberOverlay(true);
 
             const elementRect = event.target.getBoundingClientRect();
+
             setOverlayPosition({
                 top: elementRect.top + window.scrollY - 50,
                 left: elementRect.left + window.scrollX - 20,
