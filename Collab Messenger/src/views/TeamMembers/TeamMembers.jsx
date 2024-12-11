@@ -171,7 +171,6 @@ export default function TeamMembers({ teamId }) {
                             zIndex: 1001,
                             background: "rgba(0, 0, 0)",
                             right: "50px",
-                            left: "1200px",
                             padding: "20px",
                             borderRadius: "8px",
                             width: "200px",
